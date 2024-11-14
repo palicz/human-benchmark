@@ -2,9 +2,10 @@
 
 import * as z from "zod";
 import { useState, useTransition } from "react";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 import { LoginSchema } from "@/schemas";
 import { Input } from "@/components/ui/input"
@@ -21,19 +22,20 @@ import { CardWrapper } from "@/components/auth/card-wrapper"
 import { Button } from "@/components/ui/button";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-import { login } from "@/actions/login";
-import { useSearchParams } from "next/navigation";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import Link from "next/link";
 
 export const LoginForm = () => {
     const searchParams = useSearchParams();
+    const router = useRouter();
+    
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-     ? "Ez az email cím már használatban van másik szolgáltatóval."
-     : "";
+        ? "Ez az email cím már használatban van másik szolgáltatóval."
+        : "";
 
     const [error, setError] = useState<string | undefined>("");
     const [success, setSuccess] = useState<string | undefined>("");
-    const [isPending, startTransition] = useTransition();
+    const [isPending, setIsPending] = useState(false);
 
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -43,17 +45,26 @@ export const LoginForm = () => {
         }
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-        setError("")
-        setSuccess("")
+    const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
+        setError("");
+        setIsPending(true);
 
-        startTransition(() => {
-            login(values)
-            .then((data) => {
-                setError(data?.error)
-                setSuccess(data?.success)
-            })
-        })
+        try {
+            const result = await signIn("credentials", {
+                ...values,
+                redirect: false,
+            });
+
+            if (result?.error) {
+                setError("Érvénytelen bejelentkezési adatok!");
+            } else {
+                router.push(DEFAULT_LOGIN_REDIRECT);
+            }
+        } catch (error) {
+            setError("Hoppá! Valami hiba történt!");
+        } finally {
+            setIsPending(false);
+        }
     };
 
     return (
@@ -89,7 +100,7 @@ export const LoginForm = () => {
                                 </FormControl>
                                 <Button size="sm" variant="link" asChild className="px-0 font-normal">
                                         <Link href="/auth/reset">
-                                        Elfelejtetted a jelszavadat?
+                                            Elfelejtetted a jelszavadat?
                                         </Link>
                                     </Button>
                                 <FormMessage />

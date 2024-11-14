@@ -34,8 +34,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Bejelentkezés letiltása email megerősítése nélkül
       if (!existingUser?.emailVerified) return false;
 
-      // TODO: 2FA ???
-
       return true;
     },
     async session({ token, session }) {
