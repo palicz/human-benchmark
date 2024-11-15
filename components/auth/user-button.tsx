@@ -14,10 +14,11 @@ import {
 } from "@/components/ui/avatar"
 
 import { FaUser } from "react-icons/fa";
-import { LogOut, User } from "lucide-react";
+import { LogOut, Shield, User } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { ProfileButton } from "@/components/auth/profile-button";
+import { AdminButton } from "./admin-button";
 
 export const UserButton = () => {
     const user = useCurrentUser();
@@ -36,13 +37,19 @@ export const UserButton = () => {
                 <ProfileButton>
                     <DropdownMenuItem>
                         <User className="h-4" />
-                        Profile
+                        Profil
                     </DropdownMenuItem>
                 </ProfileButton>
+                <AdminButton>
+                    <DropdownMenuItem>
+                        <Shield className="h-4" />
+                        Admin
+                    </DropdownMenuItem>
+                </AdminButton>
                 <LogoutButton>
                     <DropdownMenuItem>
                         <LogOut className="h-4"/>
-                        Logout
+                        Kijelentkezés
                     </DropdownMenuItem>
                 </LogoutButton>
             </DropdownMenuContent>

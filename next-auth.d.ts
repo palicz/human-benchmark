@@ -5,6 +5,7 @@ import { JWT } from "next-auth/jwt"
 export type ExtendedUser = DefaultSession["user"] & {
     id: string;
     role: UserRole
+    emailVerified: Date
 }
 
 declare module "next-auth" {
