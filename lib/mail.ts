@@ -9,7 +9,7 @@ export const sendVerificationEmail = async (
     const confirmLink = `http://localhost:3000/auth/new-verification?token=${token}`;
 
     await resend.emails.send({
-        from: "human-benchmark@resend.dev",
+        from: "mail@realpalicz.tech",
         to: email,
         subject: "Email megerősítése",
         html: `<p>Kattints <a href="${confirmLink}">ide</a> az email címed megerősítéséhez.</p>`
@@ -23,7 +23,7 @@ export const sendPasswordResetEmail = async (
     const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
 
     await resend.emails.send({
-        from: "human-benchmark@resend.dev",
+        from: "mail@realpalicz.tech",
         to: email,
         subject: "Email megerősítése",
         html: `<p>Kattints <a href="${resetLink}">ide</a> a jelszavad megváltoztatásához.</p>`
