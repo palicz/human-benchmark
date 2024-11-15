@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { LogIn, Cog } from "lucide-react"
+import { LogIn } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
@@ -19,11 +19,6 @@ export default function SimpleNavbar() {
           <Link href="/" className="flex items-center space-x-2">
             <span className="h-6 w-6 rounded-full bg-primary" />
             <span className="font-bold">Human Benchmark</span>
-          </Link>
-          <Link href="/settings" className="flex items-center space-x-2 ml-auto mr-4">
-            <Button variant="default" className="w-10 h-10">
-              <Cog className="h-4 w-4" />
-            </Button>
           </Link>
           {status === "authenticated" ? (
             <UserButton />

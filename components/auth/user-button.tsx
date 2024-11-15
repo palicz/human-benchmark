@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/avatar"
 
 import { FaUser } from "react-icons/fa";
-import { LogOut } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { ProfileButton } from "@/components/auth/profile-button";
 
 export const UserButton = () => {
     const user = useCurrentUser();
@@ -32,6 +33,12 @@ export const UserButton = () => {
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="end">
+                <ProfileButton>
+                    <DropdownMenuItem>
+                        <User className="h-4" />
+                        Profile
+                    </DropdownMenuItem>
+                </ProfileButton>
                 <LogoutButton>
                     <DropdownMenuItem>
                         <LogOut className="h-4"/>
