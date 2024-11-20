@@ -8,7 +8,7 @@ const MemoryGamePage = () => {
     const [score, setScore] = useState(0);
     const [showNumber, setShowNumber] = useState(true);
     const [gameOver, setGameOver] = useState(false);
-
+    const [gameStarted, setGameStarted] = useState(false);
     // Generate a random number string of increasing length
     const generateNextNumber = (newScore:number) => {
         setPlayerInput('');
@@ -46,6 +46,11 @@ const MemoryGamePage = () => {
         setGameOver(false);
         generateNextNumber(0);
     };
+    const startGame = () => {
+        setScore(0);
+        setGameStarted(true); // Set the game as started
+        generateNextNumber(0); // Generate the first number
+    };
 
     // Start the game on initial render
     useEffect(() => {
@@ -58,8 +63,19 @@ const MemoryGamePage = () => {
 
     return (
         <div className="game-container text-center p-5">
+            {!gameStarted ? (
+                <div className="start-screen text-center">
             <h1 className="text-3xl font-bold mb-5">Number Memory Game</h1>
-
+                    <button
+                        onClick={startGame}
+                        className="px-4 py-2 bg-blue-500 text-white rounded text-lg"
+                    >
+                        Start
+                    </button>
+                </div>
+            ):(
+                <>
+                <h1 className="text-3xl font-bold mb-5">Number Memory Game</h1>
             {!gameOver ? (
                 <>
                     {showNumber ? (
@@ -100,6 +116,8 @@ const MemoryGamePage = () => {
                     </button>
                 </div>
             )}
+                </>
+                )}
         </div>
     );
 };
