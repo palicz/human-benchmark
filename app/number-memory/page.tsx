@@ -10,12 +10,16 @@ const MemoryGamePage = () => {
     const [gameOver, setGameOver] = useState(false);
 
     // Generate a random number string of increasing length
-    const generateNextNumber = () => {
+    const generateNextNumber = (newScore:number) => {
         setPlayerInput('');
-        const nextLength = score + 1;
+        const length = newScore + 1;
         let newNumber = '';
-        for (let i = 0; i < nextLength; i++) {
-            newNumber += Math.floor(Math.random() * 10).toString();
+        for (let i = 0; i < length; i++) {
+            if(i===0){
+            newNumber += (Math.floor(Math.random() * 9)+1).toString();
+                } else{
+                newNumber += Math.floor(Math.random()*10).toString();
+            }
         }
         setCurrentNumber(newNumber);
         setShowNumber(true);
@@ -29,24 +33,28 @@ const MemoryGamePage = () => {
     // Check player input
     const checkInput = () => {
         if (playerInput === currentNumber) {
-            setScore(score + 1);
-            generateNextNumber();
+            setScore((prevScore) => prevScore + 1);
         } else {
             setGameOver(true);
         }
+
     };
 
     // Restart the game
     const restartGame = () => {
         setScore(0);
         setGameOver(false);
-        generateNextNumber();
+        generateNextNumber(0);
     };
 
     // Start the game on initial render
     useEffect(() => {
-        generateNextNumber();
-    }, []);
+        if(!gameOver){generateNextNumber(score)}
+
+    }, [score,gameOver]);
+    useEffect(()=>{
+        generateNextNumber(0);
+    },[]);
 
     return (
         <div className="game-container text-center p-5">
