@@ -169,14 +169,14 @@ const MemoryGamePage = () => {
         <div className="game-container text-center p-5">
             {!gameStarted ? (
                 <div className="start-screen text-center">
-                    <h1 className="text-3xl font-bold mb-5">Number Memory Game</h1>
+                    <h1 className="text-3xl font-bold mb-5 text-primary">Number Memory Game</h1>
                     <button
                         onClick={startGame}
-                        className="px-4 py-2 bg-blue-500 text-white rounded text-lg"
+                        className="px-4 py-2 rounded text-lg text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background"
                     >
                         Start
                     </button>
-                    <h2 className="text-2xl font-bold mt-5">Top Scores:</h2>
+                    <h2 className="text-2xl font-bold mt-5 text-secondary">Top Scores:</h2>
                     <ul className="top-scores mt-3">
                         {topScores.map((score: Score) => (
                             <li key={score.id} className="text-lg">
@@ -187,18 +187,18 @@ const MemoryGamePage = () => {
                 </div>
             ) : (
                 <>
-                    <h1 className="text-3xl font-bold mb-5">Number Memory Game</h1>
+                    <h1 className="text-3xl font-bold mb-5 text-primary">Number Memory Game</h1>
 
                     {!gameOver ? (
                         <>
                             {showNumber ? (
-                                <div className="number-display text-4xl font-bold my-5">
+                                <div className="number-display text-4xl font-bold my-5 text-primary">
                                     <p>{currentNumber}</p>
-                                    <p className="text-lg text-gray-600 mt-3">Time Left: {timeLeft}s</p>
+                                    <p className="text-lg text-primary mt-3">Time Left: {timeLeft}s</p>
                                 </div>
                             ) : (
-                                <div className="input-section my-5">
-                                    <label htmlFor="playerInput" className="block text-lg mb-2">
+                                <div className="input-section my-5 flex-col">
+                                    <label htmlFor="playerInput" className="block text-lg mb-2 text-primary">
                                         Enter the number:
                                     </label>
                                     <input
@@ -210,21 +210,21 @@ const MemoryGamePage = () => {
                                     />
                                     <button
                                         onClick={checkInput}
-                                        className="ml-3 px-4 py-2 bg-blue-500 text-white rounded"
+                                        className="ml-3 px-4 py-2 rounded text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background "
                                     >
                                         Submit
                                     </button>
                                 </div>
                             )}
-                            <p className="text-lg mt-5">Score: {score}</p>
+                            <p className="text-lg mt-5 text-secondary">Score: {score}</p>
                         </>
                     ) : (
                         <div className="game-over text-center mt-5">
                             <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
-                            <p className="text-lg mb-5">Your final score: {score}</p>
+                            <p className="text-lg mb-5 text-primary">Your final score: {score}</p>
                             <button
                                 onClick={restartGame}
-                                className="px-4 py-2 bg-green-500 text-white rounded"
+                                className="px-4 py-2 rounded text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background"
                             >
                                 Restart
                             </button>
