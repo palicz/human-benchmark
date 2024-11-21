@@ -17,8 +17,7 @@ export default function SimpleNavbar() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 bg-black">
         <div className="flex h-14 items-center justify-between py-4">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="h-6 w-6 rounded-full bg-primary" />
-            <span className="font-bold text-white">Human Benchmark</span>
+            <span className="font-bold text-white hover:text-secondary">Human Benchmark</span>
           </Link>
           {status === "authenticated" ? (
             <UserButton />
