@@ -7,7 +7,7 @@ interface Score {
     id: number;
     playerName: string;
     score: number;
-    createdAt: string; // Dates are typically strings when fetched from an API or database
+    createdAt: string;
 }
 const MemoryGamePage = () => {
     const [currentNumber, setCurrentNumber] = useState('');
@@ -16,9 +16,9 @@ const MemoryGamePage = () => {
     const [showNumber, setShowNumber] = useState(true);
     const [gameOver, setGameOver] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(5); // Timer state
-    const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the timer
-    const countdownRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the countdown interval
+    const [timeLeft, setTimeLeft] = useState(5);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const countdownRef = useRef<NodeJS.Timeout | null>(null);
     const [topScores, setTopScores] = useState<Score[]>([]);
     const { data: session, status } = useSession();
 
