@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         game:
-          "bg-background border-2 border-primary text-primary shadow hover:bg-primary hover:text-background w-[200px] !h-[150px] m-5 hover:w-[210px] hover:!h-[160px]",
+          "bg-background border-2 border-primary text-primary shadow hover:bg-primary hover:text-background w-[200px] !h-[200px] m-5",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-white shadow-sm hover:bg-secondary/80 w-[200px] h-[150px] m-5",
         scoreboard:
-          "bg-background border-2 border-secondary text-secondary shadow-sm hover:bg-secondary hover:text-background w-[200px] !h-[150px] m-5 hover:w-[210px] hover:!h-[160px]",
+          "bg-background border-2 border-secondary text-secondary shadow-sm hover:bg-secondary hover:text-background w-[200px] !h-[200px] m-5",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
