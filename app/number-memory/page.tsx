@@ -2,6 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
+interface Score {
+    id: number;
+    playerName: string;
+    score: number;
+    createdAt: string; // Dates are typically strings when fetched from an API or database
+}
 const MemoryGamePage = () => {
     const [currentNumber, setCurrentNumber] = useState('');
     const [playerInput, setPlayerInput] = useState('');
@@ -12,6 +18,46 @@ const MemoryGamePage = () => {
     const [timeLeft, setTimeLeft] = useState(5); // Timer state
     const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the timer
     const countdownRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the countdown interval
+    const [topScores, setTopScores] = useState<Score[]>([]);
+
+    const fetchTopScores = async () => {
+        try {
+            const response = await fetch('/api/scores');
+            console.log('Response:', response);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setTopScores(data);
+        } catch (error) {
+            console.error("Error fetching top scores:", error);
+        }
+    };
+
+
+    const saveScoreToDatabase = async () => {
+        try {
+            const payload = { name: 'Player', score };
+            console.log('Sending payload:', payload);
+            // Save the score in the database
+            const response = await fetch('/api/scores', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });// Replace with actual player name if you have one
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+            console.log("Score saved:", result);
+        } catch (error) {
+            console.error("Error saving score:", error);
+        }
+    };
 
     // Generate a random number string of increasing length
     const generateNextNumber = (newScore: number) => {
@@ -74,10 +120,11 @@ const MemoryGamePage = () => {
     };
 
     // Check player input
-    const checkInput = () => {
+    const checkInput = async () => {
         if (playerInput === currentNumber) {
             setScore((prevScore) => prevScore + 1);
         } else {
+            await saveScoreToDatabase();
             setGameOver(true);
             resetTimers(); // Stop the timer if the game is over
         }
@@ -106,6 +153,11 @@ const MemoryGamePage = () => {
             resetTimers();
         };
     }, []);
+    useEffect(()=>{
+        if(!gameStarted){
+            fetchTopScores();
+        }
+    },[gameStarted]);
 
     return (
         <div className="game-container text-center p-5">
@@ -118,6 +170,14 @@ const MemoryGamePage = () => {
                     >
                         Start
                     </button>
+                    <h2 className="text-2xl font-bold mt-5">Top Scores:</h2>
+                    <ul className="top-scores mt-3">
+                        {topScores.map((score: Score) => (
+                            <li key={score.id} className="text-lg">
+                                {score.playerName}: {score.score}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             ) : (
                 <>
