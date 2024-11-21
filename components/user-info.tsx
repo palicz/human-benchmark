@@ -23,7 +23,7 @@ export const UserInfo = ({
                     <p className="text-sm font-medium">
                         ID
                     </p>
-                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-slate-100 rounded-md">
+                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-background text-secondary rounded-md">
                         {user?.id}
                     </p>
                 </div>
@@ -31,7 +31,7 @@ export const UserInfo = ({
                     <p className="text-sm font-medium">
                         Felhasználónév
                     </p>
-                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-slate-100 rounded-md">
+                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-background text-secondary rounded-md">
                         {user?.name}
                     </p>
                 </div>
@@ -39,7 +39,7 @@ export const UserInfo = ({
                     <p className="text-sm font-medium">
                         Email cím
                     </p>
-                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-slate-100 rounded-md">
+                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-background text-secondary rounded-md">
                         {user?.email}
                     </p>
                 </div>
@@ -47,7 +47,7 @@ export const UserInfo = ({
                     <p className="text-sm font-medium">
                         Fiók típus
                     </p>
-                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-slate-100 rounded-md">
+                    <p className="truncate text-xs max-w-[180px] font-mono p-1 bg-background text-secondary rounded-md">
                         {user?.role}
                     </p>
                 </div>
