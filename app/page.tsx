@@ -7,7 +7,7 @@ export default function Home() {
     <div className="flex flex-col h-full">
       <Navbar />
       <div className="flex flex-col items-center justify-center flex-grow">
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-4 gap-6">
           <Link href="/games/number-memory">
             <Button variant="game">
               <span>Number Memory Test</span>
