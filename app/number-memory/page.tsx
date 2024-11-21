@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useSession } from "next-auth/react";
 
 interface Score {
     id: number;
@@ -19,6 +20,7 @@ const MemoryGamePage = () => {
     const timerRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the timer
     const countdownRef = useRef<NodeJS.Timeout | null>(null); // Ref to manage the countdown interval
     const [topScores, setTopScores] = useState<Score[]>([]);
+    const { data: session, status } = useSession();
 
     const fetchTopScores = async () => {
         try {
@@ -39,7 +41,11 @@ const MemoryGamePage = () => {
 
     const saveScoreToDatabase = async () => {
         try {
-            const payload = { name: 'Player', score };
+            if (status === "authenticated" && session?.user?.name) {
+                const userName = session.user.name;
+                // Use the userName variable as needed
+
+            const payload = { name: userName, score };
             console.log('Sending payload:', payload);
             // Save the score in the database
             const response = await fetch('/api/scores', {
@@ -53,7 +59,7 @@ const MemoryGamePage = () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const result = await response.json();
-            console.log("Score saved:", result);
+            console.log("Score saved:", result);}
         } catch (error) {
             console.error("Error saving score:", error);
         }
