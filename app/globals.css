@@ -14,7 +14,7 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 8%;
+    --background: 60 4% 87%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 0%;
     --card-foreground: 222.2 84% 4.9%;
@@ -22,7 +22,7 @@ body {
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 200 100% 50%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 130 100% 50%;
+    --secondary: 125 75% 50%;
     --secondary-foreground: 130 50% 50%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -82,8 +82,19 @@ body {
  textarea:-webkit-autofill,
  select:-webkit-autofill {
    @apply bg-background text-foreground border-input;
-   -webkit-text-fill-color: currentColor; /* Ensure text matches foreground */
-   transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s; /* Prevent flash effect */
-   box-shadow: 0 0 0px 1000px var(--background) inset !important; /* Match input background */
+   -webkit-text-fill-color: currentColor;
+   transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
+   box-shadow: 0 0 0px 1000px var(--background) inset !important;
  }
+
+ @layer utilities {
+  .hover-scale {
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+}
+
 
