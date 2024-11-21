@@ -6,27 +6,29 @@ export default function Home() {
   return (
     <div className="flex flex-col h-full">
       <Navbar />
-      <div className="flex items-center justify-center flex-grow">
-        <Link href="/games/number-memory">
-          <Button variant="game">
-            <span>Number Memory Test</span>
-          </Button>
-        </Link>
-        <Link href="/games/aim-traner">
-          <Button variant="game">
-            <span>Aim Trainer</span>
-          </Button>
-        </Link>
-        <Link href="/games/memory-test">
-          <Button variant="game">
-            <span>Memory Test</span>
-          </Button>
-        </Link>
-        <Link href="/games/typing-test">
-          <Button variant="game">
-            <span>Typing Test</span>
-          </Button>
-        </Link>
+      <div className="flex flex-col items-center justify-center flex-grow">
+        <div className="grid grid-cols-4">
+          <Link href="/games/number-memory">
+            <Button variant="game">
+              <span>Number Memory Test</span>
+            </Button>
+          </Link>
+          <Link href="/games/aim-traner">
+            <Button variant="game">
+              <span>Aim Trainer</span>
+            </Button>
+          </Link>
+          <Link href="/games/memory-test">
+            <Button variant="game">
+              <span>Memory Test</span>
+            </Button>
+          </Link>
+          <Link href="/games/typing-test">
+            <Button variant="game">
+              <span>Typing Test</span>
+            </Button>
+          </Link>
+        </div>
         <Link href="/scoreboard">
           <Button variant="scoreboard">
             <span>Scoreboard</span>
