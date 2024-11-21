@@ -13,7 +13,7 @@ export default function Home() {
               <span>Number Memory Test</span>
             </Button>
           </Link>
-          <Link href="/games/aim-traner">
+          <Link href="/games/aim-trainer">
             <Button variant="game">
               <span>Aim Trainer</span>
             </Button>
