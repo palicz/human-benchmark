@@ -14,7 +14,7 @@ enum UserRole {
 
 model Scoreboard {
   id         Int      @id @default(autoincrement())
-  playerName String
+  playerName String   @unique
   score      Int
   createdAt  DateTime @default(now())
 }

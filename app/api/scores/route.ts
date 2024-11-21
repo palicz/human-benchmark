@@ -6,10 +6,31 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     const body = await req.json();
+    const { name, score } = body;
 
     try {
+        const existingScore = await prisma.scoreboard.findUnique({
+            where: { playerName: name },
+        });
+
+        if (existingScore) {
+            // Only update if the new score is higher
+            if (score > existingScore.score) {
+                const updatedScore = await prisma.scoreboard.update({
+                    where: { playerName: name },
+                    data: { score },
+                });
+                return NextResponse.json(updatedScore, { status: 200 });
+            }
+
+            // If the score is not higher, return a message
+            return NextResponse.json(
+                { message: 'New score is not higher than the existing score.' },
+                { status: 200 }
+            );
+        }
         const newScore = await prisma.scoreboard.create({
-            data: { playerName: body.name, score: body.score },
+            data: { playerName: name, score },
         });
         return NextResponse.json(newScore, { status: 201 });
     } catch (error) {
