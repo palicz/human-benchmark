@@ -290,7 +290,7 @@ const TypingChallengeGame: React.FC = () => {
                             </>
                         ) : (
                             <div className="game-over text-center mt-5">
-                                <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
+                                <h2 className="text-2xl font-bold text-secondary mb-4">Good job!</h2>
                                 <p className="text-lg mb-5 text-primary">
                                     Your typing speed: <span className="font-bold">{wpm || "N/A"} WPM</span>
                                 </p>
