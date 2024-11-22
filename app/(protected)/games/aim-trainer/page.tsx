@@ -41,7 +41,6 @@ const GameArea: React.FC<GameAreaProps> = ({ gameStarted, incrementScore }) => {
             const gameAreaRect = gameAreaRef.current.getBoundingClientRect();
             const targetSize = 50;
 
-
             const maxX = gameAreaRect.width - targetSize;
             const maxY = gameAreaRect.height - targetSize;
 
@@ -175,55 +174,55 @@ export default function AimTrainingPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-background w-3/5">
             <div className="game-container text-center p-5 w-11/12 max-w-6xl">
-                {!gameStarted ? (
-                    <div className="start-screen text-center max-w-xl mx-auto">
-                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
-                        <p className="w-full justify-self-center text-xl font-bold text-secondary mb-5">
-                            Click on the targets as quickly as possible. You have 30 seconds to get the highest score!
-                        </p>
-                        <button
-                            onClick={startGame}
-                            className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover:scale-105 transition-transform"
-                        >
-                            Start
-                        </button>
-                        <h2 className="text-2xl font-bold mt-5 text-secondary">Top Scores:</h2>
-                        <ul className="top-scores mt-3">
-                            {topScores
-                                .filter((score: Score) => score.aimScore !== null && score.aimScore !== undefined)
-                                .map((score: Score) => (
-                                <li key={score.id} className="text-lg text-primary">
-                                    {score.playerName}:Aim Trainer - {score.aimScore ?? "N/A"}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ) : (
-                    <>
-                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
-                        {!gameOver ? (
+                {!gameStarted || gameOver ? (
+                    <div className="game-screen text-center max-w-xl mx-auto bg-primary px-10 py-10 rounded-xl">
+                        {!gameStarted ? (
                             <>
-                                <div className="mb-4">
-                                    <span className="text-xl font-bold text-secondary mr-4">Score: {score}</span>
-                                    <span className="text-xl font-bold text-red-500 font-bold">Time Left: {timeLeft}s</span>
-                                </div>
-                                <GameArea
-                                    gameStarted={gameStarted}
-                                    incrementScore={incrementScore}
-                                />
+                                <h1 className="text-4xl font-bold mb-5 text-white">Aim Training Game</h1>
+                                <p className="w-full justify-self-center text-xl text-white mb-5">
+                                    Click on the targets as quickly as possible. You have 30 seconds to get the highest score!
+                                </p>
+                                <button
+                                    onClick={startGame}
+                                    className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
+                                >
+                                    Start
+                                </button>
+                                <h2 className="text-2xl font-bold mt-5 text-white">Top Scores:</h2>
+                                <ul className="top-scores mt-3">
+                                    {topScores
+                                        .filter((score: Score) => score.aimScore !== null && score.aimScore !== undefined)
+                                        .map((score: Score) => (
+                                        <li key={score.id} className="text-lg text-white">
+                                            {score.playerName}: Aim Trainer - {score.aimScore ?? "N/A"}
+                                        </li>
+                                    ))}
+                                </ul>
                             </>
                         ) : (
-                            <div className="game-over text-center mt-5">
-                                <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
-                                <p className="text-xl font-bold mb-5 text-primary">Your final score: {score}</p>
+                            <div className="game-over text-center">
+                                <h2 className="text-4xl font-bold text-black mb-4">Game Over!</h2>
+                                <p className="text-2xl font-bold mb-5 text-white">Your final score: {score}</p>
                                 <button
                                     onClick={restartGame}
-                                    className="px-4 py-2 rounded text-xl font-bold text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover:scale-105 transition-transform"
+                                    className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover:scale-105 transition-transform"
                                 >
                                     Restart
                                 </button>
                             </div>
                         )}
+                    </div>
+                ) : (
+                    <>
+                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
+                        <div className="mb-4">
+                            <span className="text-xl font-bold text-secondary mr-4">Score: {score}</span>
+                            <span className="text-xl font-bold text-secondary font-bold">Time Left: <span className="text-red-500">{timeLeft}s</span></span>
+                        </div>
+                        <GameArea
+                            gameStarted={gameStarted}
+                            incrementScore={incrementScore}
+                        />
                     </>
                 )}
             </div>

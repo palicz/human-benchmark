@@ -45,21 +45,22 @@ const MemoryGamePage = () => {
                 const userName = session.user.name;
                 // Use the userName variable as needed
 
-            const payload = { name: userName, score };
-            console.log('Sending payload:', payload);
-            // Save the score in the database
-            const response = await fetch('/api/scores', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
-            });// Replace with actual player name if you have one
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const payload = { name: userName, score };
+                console.log('Sending payload:', payload);
+                // Save the score in the database
+                const response = await fetch('/api/scores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });// Replace with actual player name if you have one
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                console.log("Score saved:", result);
             }
-            const result = await response.json();
-            console.log("Score saved:", result);}
         } catch (error) {
             console.error("Error saving score:", error);
         }
@@ -159,84 +160,91 @@ const MemoryGamePage = () => {
             resetTimers();
         };
     }, []);
-    useEffect(()=>{
-        if(!gameStarted){
+    useEffect(() => {
+        if (!gameStarted) {
             fetchTopScores();
         }
-    },[gameStarted]);
+    }, [gameStarted]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-        <div className="game-container text-center p-5">
-            {!gameStarted ? (
-                <div className="start-screen text-center max-w-xl w-full">
-                    <h1 className="text-4xl font-bold mb-5 text-primary">Number Memory Game</h1>
-                    <p className="w-full justify-self-center text-xl font-bold text-secondary mb-5">The Number Memory Game is a task where a number appears starting with one digit and progressively increases in length, and you will have 5 seconds to memorize it before typing the number from memory.</p>
-                    <button
-                        onClick={startGame}
-                        className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
-                    >
-                        Start
-                    </button>
-                    <h2 className="text-2xl font-bold mt-5 text-secondary">Top Scores:</h2>
-                    <ul className="top-scores mt-3">
-                        {topScores
-                            .filter((score: Score) => score.score !== null && score.score !== undefined)
-                            .map((score: Score) => (
-                            <li key={score.id} className="text-lg">
-                                {score.playerName}: Memory Game - {score.score ?? "N/A"}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ) : (
-                <>
-                    <h1 className="text-4xl font-bold mb-5 text-primary">Number Memory Game</h1>
+        <div className="min-h-screen w-full flex items-center justify-center bg-white">
+            <div className="game-container text-center p-5">
+                <div className="border-4 border-primary px-10 py-10 rounded-xl bg-primary">
+                    {!gameStarted ? (
+                        <div className="start-screen text-center max-w-xl w-full">
+                            <h1 className="text-4xl font-bold mb-5 text-white tracking-widest">Number Memory Game</h1>
+                            <p className="w-full justify-self-center text-xl text-white mb-5">The Number Memory Game is a task where a number appears starting with one digit and progressively increases in length, and you will have 5 seconds to memorize it before typing the number from memory.</p>
+                            <button
+                                onClick={startGame}
+                                className="px-4 py-2 rounded-md text-xl font-bold text-background bg-secondary border-2 border-primary hover:bg-background hover:text-secondary hover-scale"
+                            >
+                                Start
+                            </button>
+                            <h2 className="text-2xl font-bold mt-5 text-white">Top Scores:</h2>
+                            <ul className="top-scores mt-3">
+                                {topScores
+                                    .filter((score: Score) => score.score !== null && score.score !== undefined)
+                                    .map((score: Score) => (
+                                        <li key={score.id} className="text-lg text-white">
+                                            {score.playerName}: Memory Game - {score.score ?? "N/A"}
+                                        </li>
+                                    ))}
+                            </ul>
+                        </div>
+                    ) : (
+                        <div className="game-screen text-center max-w-xl w-full">
+                            <h1 className="text-4xl font-bold mb-5 text-white">Number Memory Game</h1>
 
-                    {!gameOver ? (
-                        <>
-                            {showNumber ? (
-                                <div className="number-display text-4xl font-bold my-5 text-primary">
-                                    <p>{currentNumber}</p>
-                                    <p className="text-xl font-bold text-primary mt-3">Time Left: {timeLeft}s</p>
-                                </div>
+                            {!gameOver ? (
+                                <>
+                                    {showNumber ? (
+                                        <div className="number-display text-4xl font-bold my-5 text-white">
+                                            <p className="text-secondary">{currentNumber}</p>
+                                            <p className="text-xl font-bold mt-3">Time Left: <span className="text-xl font-bold text-red-500">{timeLeft}s</span></p>
+                                        </div>
+                                    ) : (
+                                        <div className="input-section my-5 flex-col">
+                                            <label htmlFor="playerInput" className="block text-xl font-bold mb-2 text-white">
+                                                Enter the number:
+                                            </label>
+                                            <input
+                                                id="playerInput"
+                                                type="text"
+                                                className="text-secondary text-md font-bold border-4 border-white p-2 rounded"
+                                                value={playerInput}
+                                                onChange={(e) => setPlayerInput(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                      checkInput();
+                                                    }
+                                                  }}
+                                            />
+                                            <button
+                                                onClick={checkInput}
+                                                className="ml-3 px-4 py-2 rounded text-white text-xl font-bold bg-secondary hover:bg-white hover:text-secondary hover-scale"
+                                            >
+                                                Submit
+                                            </button>
+                                        </div>
+                                    )}
+                                    <p className="text-xl font-bold mt-5 text-white">Score: {score}</p>
+                                </>
                             ) : (
-                                <div className="input-section my-5 flex-col">
-                                    <label htmlFor="playerInput" className="block text-xl font-bold mb-2 text-primary">
-                                        Enter the number:
-                                    </label>
-                                    <input
-                                        id="playerInput"
-                                        type="text"
-                                        className="border p-2 rounded"
-                                        value={playerInput}
-                                        onChange={(e) => setPlayerInput(e.target.value)}
-                                    />
+                                <div className="game-over text-center mt-5">
+                                    <h2 className="text-2xl font-bold text-red-500 mb-4">Game Over!</h2>
+                                    <p className="text-xl font-bold mb-5 text-white">Your final score: {score}</p>
                                     <button
-                                        onClick={checkInput}
-                                        className="ml-3 px-4 py-2 rounded text-primary text-xl font-bold bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                                        onClick={restartGame}
+                                        className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
                                     >
-                                        Submit
+                                        Restart
                                     </button>
                                 </div>
                             )}
-                            <p className="text-xl font-bold mt-5 text-secondary">Score: {score}</p>
-                        </>
-                    ) : (
-                        <div className="game-over text-center mt-5">
-                            <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
-                            <p className="text-xl font-bold mb-5 text-primary">Your final score: {score}</p>
-                            <button
-                                onClick={restartGame}
-                                className="px-4 py-2 rounded text-xl font-bold text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
-                            >
-                                Restart
-                            </button>
                         </div>
                     )}
-                </>
-            )}
-        </div>
+                </div>
+            </div>
         </div>
     );
 };

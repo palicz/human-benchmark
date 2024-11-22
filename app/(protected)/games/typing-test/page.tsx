@@ -247,27 +247,27 @@ const TypingChallengeGame: React.FC = () => {
     }, [gameStarted]);
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="game-container text-center p-5">
+        <div className="min-h-screen flex items-center justify-center bg-background">
+            <div className="game-container text-center p-8 bg-primary rounded-xl shadow-lg border-4 border-primary max-w-4xl w-full">
                 {!gameStarted ? (
-                    <div className="start-screen text-center max-w-xl w-full">
-                        <h1 className="text-3xl font-bold mb-5 text-primary">Typing Challenge</h1>
-                        <p className="w-full text-xl font-bold text-secondary mb-5">
+                    <div className="start-screen text-center w-full">
+                        <h1 className="text-4xl font-bold mb-6 text-white">Typing Challenge</h1>
+                        <p className="text-xl text-white mb-8">
                             Test your typing speed and accuracy by typing the words displayed
                             as fast as you can before the timer runs out!
                         </p>
                         <button
                             onClick={startGame}
-                            className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                            className="px-6 py-3 rounded-lg text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
                         >
                             Start
                         </button>
-                        <h2 className="text-2xl font-bold mt-5 text-secondary">Top Scores:</h2>
-                        <ul className="top-scores mt-3">
+                        <h2 className="text-2xl font-bold mt-8 mb-4 text-white">Top Scores:</h2>
+                        <ul className="top-scores space-y-2">
                             {topScores
                                 .filter((score: Score) => score.typeScore !== null && score.typeScore !== undefined)
                                 .map((score: Score) => (
-                                    <li key={score.id} className="text-lg">
+                                    <li key={score.id} className="text-lg text-primary">
                                         {score.playerName}: Typing Speed - {score.typeScore ?? "N/A"} WPM
                                     </li>
                                 ))}
@@ -275,12 +275,12 @@ const TypingChallengeGame: React.FC = () => {
                     </div>
                 ) : (
                     <>
-                        <h1 className="text-3xl font-bold mb-5 text-primary">Typing Challenge</h1>
+                        <h1 className="text-3xl font-bold mb-6 text-white">Typing Challenge</h1>
 
                         {!gameOver ? (
                             <>
-                                <div className="text-left text-xl font-bold text-secondary mb-5">
-                                    <p>Time Elapsed: <span className="font-bold text-primary">{elapsedTime}s</span></p>
+                                <div className="text-left text-xl font-bold text-secondary mb-4">
+                                    <p>Time Elapsed: <span className="font-bold text-red-500">{elapsedTime}s</span></p>
                                 </div>
                                 <pre 
                                     style={{
@@ -289,12 +289,12 @@ const TypingChallengeGame: React.FC = () => {
                                         fontSize: "1.2em",
                                         wordWrap: "break-word",
                                         whiteSpace: "pre-wrap",
-                                        userSelect: "none", // Disable text selection
+                                        userSelect: "none",
                                         WebkitUserSelect: "none",
                                         MozUserSelect: "none",
                                         msUserSelect: "none",
                                     }} 
-                                    className="code-snippet p-3 bg-gray-100 text-left rounded text-md text-secondary border"
+                                    className="code-snippet p-4 bg-gray-100 text-left rounded-lg text-md text-secondary border mb-4"
                                     onCopy={preventCopyPaste}
                                     onCut={preventCopyPaste}
                                     onPaste={preventCopyPaste}
@@ -309,10 +309,10 @@ const TypingChallengeGame: React.FC = () => {
                                     onCut={preventCopyPaste}
                                     onPaste={preventCopyPaste}
                                     onContextMenu={preventContextMenu}
-                                    placeholder="Type the code here..."
-                                    className="mt-4 p-2 border rounded w-full text-md"
+                                    placeholder="Type the text here..."
+                                    className="mt-4 p-3 border rounded-lg w-full text-md"
                                     style={{
-                                        userSelect: "none", // Disable text selection
+                                        userSelect: "none",
                                         WebkitUserSelect: "none",
                                         MozUserSelect: "none",
                                         msUserSelect: "none",
@@ -320,20 +320,20 @@ const TypingChallengeGame: React.FC = () => {
                                 />
                             </>
                         ) : (
-                            <div className="game-over text-center mt-5">
-                                <h2 className="text-2xl font-bold text-secondary mb-4">Good job!</h2>
-                                <p className="text-xl font-bold mb-5 text-primary">
-                                    Your typing speed: <span className="font-bold">{wpm || "N/A"} WPM</span>
+                            <div className="game-over text-center mt-6">
+                                <h2 className="text-3xl font-bold text-green-300 mb-4">Good job!</h2>
+                                <p className="text-2xl font-bold mb-6 text-white">
+                                    Your typing speed: <span className="font-bold text-green-300">{wpm || "N/A"} WPM</span>
                                 </p>
                                 <button
                                     onClick={saveScoreToDatabase}
-                                    className="px-4 py-2 mr-3 rounded text-secondary text-xl font-bold bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
+                                    className="px-6 py-3 mr-4 rounded-lg text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
                                 >
                                     Save Score
                                 </button>
                                 <button
                                     onClick={startGame}
-                                    className="px-4 py-2 rounded text-primary text-xl font-bold bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                                    className="px-6 py-3 rounded-lg text-xl font-bold text-secondary bg-white hover:bg-secondary hover:text-white hover-scale"
                                 >
                                     Try Again
                                 </button>
@@ -343,7 +343,7 @@ const TypingChallengeGame: React.FC = () => {
                 )}
             </div>
         </div>
-    );}
+    );
+}
 
-
-    export default TypingChallengeGame;
+export default TypingChallengeGame;
