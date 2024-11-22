@@ -165,6 +165,16 @@ const TypingChallengeGame: React.FC = () => {
             endGame();
         }
     };
+
+    const preventCopyPaste = (e: React.ClipboardEvent) => {
+        e.preventDefault();
+    };
+
+    const preventContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+    };
+
+    
     const getHighlightedText = () => {
         const targetText = codeSnippet; // Use your existing text variable name
         return (
@@ -242,13 +252,13 @@ const TypingChallengeGame: React.FC = () => {
                 {!gameStarted ? (
                     <div className="start-screen text-center max-w-xl w-full">
                         <h1 className="text-3xl font-bold mb-5 text-primary">Typing Challenge</h1>
-                        <p className="w-full text-md font-medium text-secondary mb-5">
+                        <p className="w-full text-xl font-bold text-secondary mb-5">
                             Test your typing speed and accuracy by typing the words displayed
                             as fast as you can before the timer runs out!
                         </p>
                         <button
                             onClick={startGame}
-                            className="px-4 py-2 rounded text-lg text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                            className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
                         >
                             Start
                         </button>
@@ -269,40 +279,61 @@ const TypingChallengeGame: React.FC = () => {
 
                         {!gameOver ? (
                             <>
-                                <div className="text-left text-lg font-medium text-secondary mb-5">
+                                <div className="text-left text-xl font-bold text-secondary mb-5">
                                     <p>Time Elapsed: <span className="font-bold text-primary">{elapsedTime}s</span></p>
                                 </div>
-                                <pre style={{
-                                    textAlign: "justify",
-                                    color: "lightgreen",
-                                    fontSize: "1.2em",
-                                    wordWrap: "break-word",
-                                    whiteSpace: "pre-wrap", // Ensures the text wraps properly
-                                }} className="code-snippet p-3 bg-gray-100 text-left rounded text-md text-secondary border">
-                                {getHighlightedText()}
-                            </pre>
+                                <pre 
+                                    style={{
+                                        textAlign: "justify",
+                                        color: "lightgreen",
+                                        fontSize: "1.2em",
+                                        wordWrap: "break-word",
+                                        whiteSpace: "pre-wrap",
+                                        userSelect: "none", // Disable text selection
+                                        WebkitUserSelect: "none",
+                                        MozUserSelect: "none",
+                                        msUserSelect: "none",
+                                    }} 
+                                    className="code-snippet p-3 bg-gray-100 text-left rounded text-md text-secondary border"
+                                    onCopy={preventCopyPaste}
+                                    onCut={preventCopyPaste}
+                                    onPaste={preventCopyPaste}
+                                    onContextMenu={preventContextMenu}
+                                >
+                                    {getHighlightedText()}
+                                </pre>
                                 <textarea
                                     value={userInput}
                                     onChange={handleInputChange}
+                                    onCopy={preventCopyPaste}
+                                    onCut={preventCopyPaste}
+                                    onPaste={preventCopyPaste}
+                                    onContextMenu={preventContextMenu}
                                     placeholder="Type the code here..."
                                     className="mt-4 p-2 border rounded w-full text-md"
+                                    style={{
+                                        userSelect: "none", // Disable text selection
+                                        WebkitUserSelect: "none",
+                                        MozUserSelect: "none",
+                                        msUserSelect: "none",
+                                    }}
                                 />
                             </>
                         ) : (
                             <div className="game-over text-center mt-5">
                                 <h2 className="text-2xl font-bold text-secondary mb-4">Good job!</h2>
-                                <p className="text-lg mb-5 text-primary">
+                                <p className="text-xl font-bold mb-5 text-primary">
                                     Your typing speed: <span className="font-bold">{wpm || "N/A"} WPM</span>
                                 </p>
                                 <button
                                     onClick={saveScoreToDatabase}
-                                    className="px-4 py-2 mr-3 rounded text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
+                                    className="px-4 py-2 mr-3 rounded text-secondary text-xl font-bold bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
                                 >
                                     Save Score
                                 </button>
                                 <button
                                     onClick={startGame}
-                                    className="px-4 py-2 rounded text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                                    className="px-4 py-2 rounded text-primary text-xl font-bold bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
                                 >
                                     Try Again
                                 </button>
