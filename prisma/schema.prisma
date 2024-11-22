@@ -17,6 +17,7 @@ model Scoreboard {
   playerName String   @unique
   score      Int? // Nullable field for the memory game
   aimScore   Int? // Nullable field for the aim trainer game
+  typeScore  Int?
   createdAt  DateTime @default(now())
 }
 

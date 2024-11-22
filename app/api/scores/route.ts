@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const { name, score, aimScore } = body;
+    const { name, score, aimScore, typeScore } = body;
 
     try {
         const existingScore = await prisma.scoreboard.findUnique({
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
                     data: {
                         score: score !== undefined && score > (existingScore.score ?? 0) ? score : existingScore.score,
                         aimScore: aimScore !== undefined && aimScore > (existingScore.aimScore ?? 0) ? aimScore : existingScore.aimScore,
+                        typeScore:typeScore!==undefined&&typeScore>(existingScore.typeScore??0)?typeScore:existingScore.typeScore,
                     },
                 });
                 return NextResponse.json(updatedScore, { status: 200 });
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
             );
         }
         const newScore = await prisma.scoreboard.create({
-            data: { playerName: name, score, aimScore },
+            data: { playerName: name, score, aimScore,typeScore },
         });
         return NextResponse.json(newScore, { status: 201 });
     } catch (error) {
@@ -48,6 +49,7 @@ export async function GET() {
                 orderBy: [
                     {score: 'desc' },
                     {aimScore:'desc'},
+                    {typeScore:'desc'}
             ],
                 take: 10,
             });
