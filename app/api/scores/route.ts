@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const { name, score } = body;
+    const { name, score, aimScore } = body;
 
     try {
         const existingScore = await prisma.scoreboard.findUnique({
@@ -15,13 +15,15 @@ export async function POST(req: Request) {
 
         if (existingScore) {
             // Only update if the new score is higher
-            if (score > existingScore.score) {
                 const updatedScore = await prisma.scoreboard.update({
                     where: { playerName: name },
-                    data: { score },
+                    data: {
+                        score: score !== undefined && score > (existingScore.score ?? 0) ? score : existingScore.score,
+                        aimScore: aimScore !== undefined && aimScore > (existingScore.aimScore ?? 0) ? aimScore : existingScore.aimScore,
+                    },
                 });
                 return NextResponse.json(updatedScore, { status: 200 });
-            }
+
 
             // If the score is not higher, return a message
             return NextResponse.json(
@@ -30,7 +32,7 @@ export async function POST(req: Request) {
             );
         }
         const newScore = await prisma.scoreboard.create({
-            data: { playerName: name, score },
+            data: { playerName: name, score, aimScore },
         });
         return NextResponse.json(newScore, { status: 201 });
     } catch (error) {
@@ -43,7 +45,10 @@ export async function GET() {
         // Fetch top scores
         try {
             const topScores = await prisma.scoreboard.findMany({
-                orderBy: { score: 'desc' },
+                orderBy: [
+                    {score: 'desc' },
+                    {aimScore:'desc'},
+            ],
                 take: 10,
             });
             return NextResponse.json(topScores);

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 interface Score {
     id: number;
     playerName: string;
-    score: number;
+    aimScore: number;
     createdAt: string;
 }
 
@@ -40,8 +40,8 @@ const GameArea: React.FC<GameAreaProps> = ({ gameStarted, incrementScore }) => {
         if (gameAreaRef.current) {
             const gameAreaRect = gameAreaRef.current.getBoundingClientRect();
             const targetSize = 50;
-            
-            
+
+
             const maxX = gameAreaRect.width - targetSize;
             const maxY = gameAreaRect.height - targetSize;
 
@@ -98,11 +98,12 @@ export default function AimTrainingPage() {
         }
     };
 
-    const saveScoreToDatabase = async () => {
+    const saveScoreToDatabase = async (finalScore:number) => {
         try {
+            console.log("Saving score:", finalScore);
             if (status === "authenticated" && session?.user?.name) {
                 const userName = session.user.name;
-                const payload = { name: userName, score };
+                const payload = { name: userName, aimScore: finalScore };
                 const response = await fetch('/api/scores', {
                     method: 'POST',
                     headers: {
@@ -124,6 +125,7 @@ export default function AimTrainingPage() {
     const startGame = () => {
         setGameStarted(true);
         setScore(0);
+        scoreRef.current=0;
         setGameOver(false);
         setTimeLeft(30);
         timerRef.current = setInterval(() => {
@@ -133,19 +135,27 @@ export default function AimTrainingPage() {
                 } else {
                     clearInterval(timerRef.current!);
                     setGameOver(true);
-                    saveScoreToDatabase();
+                    saveScoreToDatabase(scoreRef.current)
+                        .then(() => console.log("Score saved successfully"))
+                        .catch((error) => console.error("Error saving score:", error));
                     return 0;
                 }
             });
         }, 1000);
     };
-
-    const incrementScore = useCallback(() => {
-        setScore((prevScore) => prevScore + 1);
-    }, []);
+    const scoreRef = useRef(0);
+    const incrementScore = () => {
+        setScore((prevScore) => {
+            scoreRef.current = prevScore + 1;
+            return scoreRef.current;
+        });
+    };
 
     const restartGame = () => {
-        startGame();
+        setGameStarted(false);
+        setTimeout(() => {
+            startGame();
+        },0);
     };
 
     useEffect(() => {
@@ -181,7 +191,7 @@ export default function AimTrainingPage() {
                         <ul className="top-scores mt-3">
                             {topScores.map((score: Score) => (
                                 <li key={score.id} className="text-lg text-primary">
-                                    {score.playerName}: {score.score}
+                                    {score.playerName}:Aim Trainer - {score.aimScore ?? "N/A"}
                                 </li>
                             ))}
                         </ul>

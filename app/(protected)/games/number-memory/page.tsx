@@ -182,7 +182,7 @@ const MemoryGamePage = () => {
                     <ul className="top-scores mt-3">
                         {topScores.map((score: Score) => (
                             <li key={score.id} className="text-lg">
-                                {score.playerName}: {score.score}
+                                {score.playerName}: Memory Game - {score.score ?? "N/A"}
                             </li>
                         ))}
                     </ul>
