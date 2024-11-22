@@ -23,20 +23,20 @@ export const UserTable = ({ users }: UserTableProps) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Név</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Rang</TableHead>
-          <TableHead>Email állapot</TableHead>
+          <TableHead className="text-white font-bold">ID</TableHead>
+          <TableHead className="text-white font-bold">Név</TableHead>
+          <TableHead className="text-white font-bold">Email</TableHead>
+          <TableHead className="text-white font-bold">Rang</TableHead>
+          <TableHead className="text-white font-bold">Email állapot</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {users.map((user) => (
           <TableRow key={user.id}>
-            <TableCell className="font-medium">{user.id}</TableCell>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell>{user.role}</TableCell>
+            <TableCell className="font-medium text-white">{user.id}</TableCell>
+            <TableCell className="text-white">{user.name}</TableCell>
+            <TableCell className="text-white">{user.email}</TableCell>
+            <TableCell className="text-white">{user.role}</TableCell>
             <TableCell>
               <Badge variant={user.emailVerified ? "success" : "destructive"}>
                 {user.emailVerified ? "Megerősítve" : "Megerősítésre vár"}
