@@ -189,7 +189,9 @@ export default function AimTrainingPage() {
                         </button>
                         <h2 className="text-2xl font-bold mt-5 text-secondary">Top Scores:</h2>
                         <ul className="top-scores mt-3">
-                            {topScores.map((score: Score) => (
+                            {topScores
+                                .filter((score: Score) => score.aimScore !== null && score.aimScore !== undefined)
+                                .map((score: Score) => (
                                 <li key={score.id} className="text-lg text-primary">
                                     {score.playerName}:Aim Trainer - {score.aimScore ?? "N/A"}
                                 </li>
