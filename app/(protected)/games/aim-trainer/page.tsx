@@ -177,13 +177,13 @@ export default function AimTrainingPage() {
             <div className="game-container text-center p-5 w-11/12 max-w-6xl">
                 {!gameStarted ? (
                     <div className="start-screen text-center max-w-xl mx-auto">
-                        <h1 className="text-3xl font-bold mb-5 text-primary">Aim Training Game</h1>
-                        <p className="w-full justify-self-center text-md font-medium text-secondary mb-5">
+                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
+                        <p className="w-full justify-self-center text-xl font-bold text-secondary mb-5">
                             Click on the targets as quickly as possible. You have 30 seconds to get the highest score!
                         </p>
                         <button
                             onClick={startGame}
-                            className="px-4 py-2 rounded text-lg text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover:scale-105 transition-transform"
+                            className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover:scale-105 transition-transform"
                         >
                             Start
                         </button>
@@ -200,12 +200,12 @@ export default function AimTrainingPage() {
                     </div>
                 ) : (
                     <>
-                        <h1 className="text-3xl font-bold mb-5 text-primary">Aim Training Game</h1>
+                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
                         {!gameOver ? (
                             <>
                                 <div className="mb-4">
-                                    <span className="text-lg text-secondary mr-4">Score: {score}</span>
-                                    <span className="text-lg text-red-500 font-bold">Time Left: {timeLeft}s</span>
+                                    <span className="text-xl font-bold text-secondary mr-4">Score: {score}</span>
+                                    <span className="text-xl font-bold text-red-500 font-bold">Time Left: {timeLeft}s</span>
                                 </div>
                                 <GameArea
                                     gameStarted={gameStarted}
@@ -215,10 +215,10 @@ export default function AimTrainingPage() {
                         ) : (
                             <div className="game-over text-center mt-5">
                                 <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
-                                <p className="text-lg mb-5 text-primary">Your final score: {score}</p>
+                                <p className="text-xl font-bold mb-5 text-primary">Your final score: {score}</p>
                                 <button
                                     onClick={restartGame}
-                                    className="px-4 py-2 rounded text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover:scale-105 transition-transform"
+                                    className="px-4 py-2 rounded text-xl font-bold text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover:scale-105 transition-transform"
                                 >
                                     Restart
                                 </button>

@@ -170,11 +170,11 @@ const MemoryGamePage = () => {
         <div className="game-container text-center p-5">
             {!gameStarted ? (
                 <div className="start-screen text-center max-w-xl w-full">
-                    <h1 className="text-3xl font-bold mb-5 text-primary">Number Memory Game</h1>
-                    <p className="w-full justify-self-center text-md font-medium text-secondary mb-5">The Number Memory Game is a task where a number appears starting with one digit and progressively increases in length, and you will have 5 seconds to memorize it before typing the number from memory.</p>
+                    <h1 className="text-4xl font-bold mb-5 text-primary">Number Memory Game</h1>
+                    <p className="w-full justify-self-center text-xl font-bold text-secondary mb-5">The Number Memory Game is a task where a number appears starting with one digit and progressively increases in length, and you will have 5 seconds to memorize it before typing the number from memory.</p>
                     <button
                         onClick={startGame}
-                        className="px-4 py-2 rounded text-lg text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                        className="px-4 py-2 rounded text-xl font-bold text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
                     >
                         Start
                     </button>
@@ -191,18 +191,18 @@ const MemoryGamePage = () => {
                 </div>
             ) : (
                 <>
-                    <h1 className="text-3xl font-bold mb-5 text-primary">Number Memory Game</h1>
+                    <h1 className="text-4xl font-bold mb-5 text-primary">Number Memory Game</h1>
 
                     {!gameOver ? (
                         <>
                             {showNumber ? (
                                 <div className="number-display text-4xl font-bold my-5 text-primary">
                                     <p>{currentNumber}</p>
-                                    <p className="text-lg text-primary mt-3">Time Left: {timeLeft}s</p>
+                                    <p className="text-xl font-bold text-primary mt-3">Time Left: {timeLeft}s</p>
                                 </div>
                             ) : (
                                 <div className="input-section my-5 flex-col">
-                                    <label htmlFor="playerInput" className="block text-lg mb-2 text-primary">
+                                    <label htmlFor="playerInput" className="block text-xl font-bold mb-2 text-primary">
                                         Enter the number:
                                     </label>
                                     <input
@@ -214,21 +214,21 @@ const MemoryGamePage = () => {
                                     />
                                     <button
                                         onClick={checkInput}
-                                        className="ml-3 px-4 py-2 rounded text-primary bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
+                                        className="ml-3 px-4 py-2 rounded text-primary text-xl font-bold bg-background border-2 border-primary hover:bg-primary hover:text-background hover-scale"
                                     >
                                         Submit
                                     </button>
                                 </div>
                             )}
-                            <p className="text-lg mt-5 text-secondary">Score: {score}</p>
+                            <p className="text-xl font-bold mt-5 text-secondary">Score: {score}</p>
                         </>
                     ) : (
                         <div className="game-over text-center mt-5">
                             <h2 className="text-2xl font-bold text-red-600 mb-4">Game Over!</h2>
-                            <p className="text-lg mb-5 text-primary">Your final score: {score}</p>
+                            <p className="text-xl font-bold mb-5 text-primary">Your final score: {score}</p>
                             <button
                                 onClick={restartGame}
-                                className="px-4 py-2 rounded text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
+                                className="px-4 py-2 rounded text-xl font-bold text-secondary bg-background border-2 border-secondary hover:bg-secondary hover:text-background hover-scale"
                             >
                                 Restart
                             </button>
