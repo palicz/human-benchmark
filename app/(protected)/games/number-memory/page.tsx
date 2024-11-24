@@ -25,84 +25,71 @@ const MemoryGamePage = () => {
     const fetchTopScores = async () => {
         try {
             const response = await fetch('/api/scores');
-            console.log('Response:', response);
-
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP hiba! státusz: ${response.status}`);
             }
-
             const data = await response.json();
             setTopScores(data);
         } catch (error) {
-            console.error("Error fetching top scores:", error);
+            console.error("Hiba a legjobb eredmények lekérésekor:", error);
         }
     };
-
 
     const saveScoreToDatabase = async () => {
         try {
             if (status === "authenticated" && session?.user?.name) {
                 const userName = session.user.name;
-                // Use the userName variable as needed
-
                 const payload = { name: userName, score };
-                console.log('Sending payload:', payload);
-                // Save the score in the database
                 const response = await fetch('/api/scores', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(payload),
-                });// Replace with actual player name if you have one
+                });
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP hiba! státusz: ${response.status}`);
                 }
                 const result = await response.json();
-                console.log("Score saved:", result);
             }
         } catch (error) {
-            console.error("Error saving score:", error);
+            console.error("Hiba az eredmény mentésekor:", error);
         }
     };
 
-    // Generate a random number string of increasing length
     const generateNextNumber = (newScore: number) => {
         setPlayerInput('');
-        const length = newScore + 1; // Use the new score to determine length
+        const length = newScore + 1;
         let newNumber = '';
         for (let i = 0; i < length; i++) {
             if (i === 0) {
-                newNumber += (Math.floor(Math.random() * 9) + 1).toString(); // First digit cannot be 0
+                newNumber += (Math.floor(Math.random() * 9) + 1).toString();
             } else {
-                newNumber += Math.floor(Math.random() * 10).toString(); // Subsequent digits can be 0-9
+                newNumber += Math.floor(Math.random() * 10).toString();
             }
         }
         setCurrentNumber(newNumber);
         setShowNumber(true);
-        setTimeLeft(5); // Reset the timer to 5 seconds
+        setTimeLeft(5);
     };
 
     const startNumberTimer = () => {
-        // Clear any existing timer and countdown
         resetTimers();
 
-        // Start a countdown to display the remaining time
         countdownRef.current = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev > 1) {
-                    return prev - 1; // Decrease timeLeft by 1 each second
+                    return prev - 1;
                 } else {
-                    clearInterval(countdownRef.current!); // Stop the countdown when it reaches 0
+                    clearInterval(countdownRef.current!);
                     return 0;
                 }
             });
         }, 1000);
 
-        // Start a timer to hide the number after 5 seconds
         timerRef.current = setTimeout(() => {
             setShowNumber(false);
-            clearInterval(countdownRef.current!); // Clear countdown when hiding the number
+            clearInterval(countdownRef.current!);
         }, 5000);
     };
 
@@ -117,44 +104,39 @@ const MemoryGamePage = () => {
         }
     };
 
-    // Start the game
     const startGame = () => {
         setGameStarted(true);
         setScore(0);
         setGameOver(false);
-        generateNextNumber(0); // Generate the first number
-        startNumberTimer(); // Start the timer for the first number
+        generateNextNumber(0);
+        startNumberTimer();
     };
 
-    // Check player input
     const checkInput = async () => {
         if (playerInput === currentNumber) {
             setScore((prevScore) => prevScore + 1);
         } else {
             await saveScoreToDatabase();
             setGameOver(true);
-            resetTimers(); // Stop the timer if the game is over
+            resetTimers();
         }
     };
 
-    // Restart the game
     const restartGame = () => {
         setGameStarted(true);
         setScore(0);
         setGameOver(false);
-        generateNextNumber(0); // Start from score 0
+        generateNextNumber(0);
         startNumberTimer();
     };
 
-    // Generate a new number whenever the score changes
     useEffect(() => {
         if (!gameOver && gameStarted) {
             generateNextNumber(score);
-            startNumberTimer(); // Reset the timer for the new number
+            startNumberTimer();
         }
     }, [score]);
 
-    // Cleanup timers on component unmount
     useEffect(() => {
         return () => {
             resetTimers();
@@ -172,40 +154,40 @@ const MemoryGamePage = () => {
                 <div className="border-4 border-primary px-10 py-10 rounded-xl bg-primary">
                     {!gameStarted ? (
                         <div className="start-screen text-center max-w-xl w-full">
-                            <h1 className="text-4xl font-bold mb-5 text-white tracking-widest">Number Memory Game</h1>
-                            <p className="w-full justify-self-center text-xl text-white mb-5">The Number Memory Game is a task where a number appears starting with one digit and progressively increases in length, and you will have 5 seconds to memorize it before typing the number from memory.</p>
+                            <h1 className="text-4xl font-bold mb-5 text-white tracking-widest">Number Memory Test</h1>
+                            <p className="w-full justify-self-center text-xl text-white mb-5">A Number Memory Test-ben egy szám jelenik meg, ami egyjegyűvel kezdődik, és folyamatosan nő a hossza. 5 másodperced van megjegyezni, mielőtt be kell gépelned emlékezetből.</p>
                             <button
                                 onClick={startGame}
                                 className="px-4 py-2 rounded-md text-xl font-bold text-background bg-secondary border-2 border-primary hover:bg-background hover:text-secondary hover-scale"
                             >
-                                Start
+                                Indítás
                             </button>
-                            <h2 className="text-2xl font-bold mt-5 text-white">Top Scores:</h2>
+                            <h2 className="text-2xl font-bold mt-5 text-white">Legjobb Eredmények:</h2>
                             <ul className="top-scores mt-3">
                                 {topScores
                                     .filter((score: Score) => score.score !== null && score.score !== undefined)
                                     .map((score: Score) => (
                                         <li key={score.id} className="text-md font-bold text-secondary">
-                                            {score.playerName}: Memory Game - {score.score ?? "N/A"}
+                                            {score.playerName}: Number Memory Test - {score.score ?? "N/A"}
                                         </li>
                                     ))}
                             </ul>
                         </div>
                     ) : (
                         <div className="game-screen text-center max-w-xl w-full">
-                            <h1 className="text-4xl font-bold mb-5 text-white">Number Memory Game</h1>
+                            <h1 className="text-4xl font-bold mb-5 text-white">Number Memory Test</h1>
 
                             {!gameOver ? (
                                 <>
                                     {showNumber ? (
                                         <div className="number-display text-4xl font-bold my-5 text-white">
                                             <p className="text-secondary">{currentNumber}</p>
-                                            <p className="text-xl font-bold mt-3">Time Left: <span className="text-xl font-bold text-red-500">{timeLeft}s</span></p>
+                                            <p className="text-xl font-bold mt-3">Hátralévő idő: <span className="text-xl font-bold text-red-500">{timeLeft} mp</span></p>
                                         </div>
                                     ) : (
                                         <div className="input-section my-5 flex-col">
                                             <label htmlFor="playerInput" className="block text-xl font-bold mb-2 text-white">
-                                                Enter the number:
+                                                Írd be a számot:
                                             </label>
                                             <input
                                                 id="playerInput"
@@ -223,21 +205,21 @@ const MemoryGamePage = () => {
                                                 onClick={checkInput}
                                                 className="ml-3 px-4 py-2 rounded text-white text-xl font-bold bg-secondary hover:bg-white hover:text-secondary hover-scale"
                                             >
-                                                Submit
+                                                Beküldés
                                             </button>
                                         </div>
                                     )}
-                                    <p className="text-xl font-bold mt-5 text-white">Score: {score}</p>
+                                    <p className="text-xl font-bold mt-5 text-white">Pontszám: {score}</p>
                                 </>
                             ) : (
                                 <div className="game-over text-center mt-5">
-                                    <h2 className="text-2xl font-bold text-red-500 mb-4">Game Over!</h2>
-                                    <p className="text-xl font-bold mb-5 text-white">Your final score: {score}</p>
+                                    <h2 className="text-2xl font-bold text-red-500 mb-4">Játék vége!</h2>
+                                    <p className="text-xl font-bold mb-5 text-white">Végső pontszámod: {score}</p>
                                     <button
                                         onClick={restartGame}
                                         className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
                                     >
-                                        Restart
+                                        Újrajátszás
                                     </button>
                                 </div>
                             )}

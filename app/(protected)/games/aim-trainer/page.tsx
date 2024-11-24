@@ -22,7 +22,7 @@ const Target: React.FC<TargetProps> = ({ x, y, onClick }) => {
             className="absolute w-10 h-10 bg-red-500 rounded-full cursor-crosshair"
             style={{ left: `${x}px`, top: `${y}px` }}
             onClick={onClick}
-            aria-label="Target"
+            aria-label="Célpont"
         />
     );
 };
@@ -88,18 +88,18 @@ export default function AimTrainingPage() {
         try {
             const response = await fetch('/api/scores');
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP hiba! Státusz: ${response.status}`);
             }
             const data = await response.json();
             setTopScores(data);
         } catch (error) {
-            console.error("Error fetching top scores:", error);
+            console.error("Hiba a legjobb pontszámok lekérésekor:", error);
         }
     };
 
-    const saveScoreToDatabase = async (finalScore:number) => {
+    const saveScoreToDatabase = async (finalScore: number) => {
         try {
-            console.log("Saving score:", finalScore);
+            console.log("Pontszám mentése:", finalScore);
             if (status === "authenticated" && session?.user?.name) {
                 const userName = session.user.name;
                 const payload = { name: userName, aimScore: finalScore };
@@ -111,20 +111,20 @@ export default function AimTrainingPage() {
                     body: JSON.stringify(payload),
                 });
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP hiba! Státusz: ${response.status}`);
                 }
                 const result = await response.json();
-                console.log("Score saved:", result);
+                console.log("Pontszám mentve:", result);
             }
         } catch (error) {
-            console.error("Error saving score:", error);
+            console.error("Hiba a pontszám mentésekor:", error);
         }
     };
 
     const startGame = () => {
         setGameStarted(true);
         setScore(0);
-        scoreRef.current=0;
+        scoreRef.current = 0;
         setGameOver(false);
         setTimeLeft(30);
         timerRef.current = setInterval(() => {
@@ -135,8 +135,8 @@ export default function AimTrainingPage() {
                     clearInterval(timerRef.current!);
                     setGameOver(true);
                     saveScoreToDatabase(scoreRef.current)
-                        .then(() => console.log("Score saved successfully"))
-                        .catch((error) => console.error("Error saving score:", error));
+                        .then(() => console.log("Pontszám sikeresen mentve"))
+                        .catch((error) => console.error("Hiba a pontszám mentésekor:", error));
                     return 0;
                 }
             });
@@ -154,7 +154,7 @@ export default function AimTrainingPage() {
         setGameStarted(false);
         setTimeout(() => {
             startGame();
-        },0);
+        }, 0);
     };
 
     useEffect(() => {
@@ -178,46 +178,46 @@ export default function AimTrainingPage() {
                     <div className="game-screen text-center max-w-xl mx-auto bg-primary px-10 py-10 rounded-xl">
                         {!gameStarted ? (
                             <>
-                                <h1 className="text-4xl font-bold mb-5 text-white">Aim Training Game</h1>
+                                <h1 className="text-4xl font-bold mb-5 text-white">Aim Trainer</h1>
                                 <p className="w-full justify-self-center text-xl text-white mb-5">
-                                    Click on the targets as quickly as possible. You have 30 seconds to get the highest score!
+                                    Kattints a célpontokra, amilyen gyorsan csak lehet! 30 másodperced van, hogy minél több pontot szerezz!
                                 </p>
                                 <button
                                     onClick={startGame}
                                     className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
                                 >
-                                    Start
+                                    Indítás
                                 </button>
-                                <h2 className="text-2xl font-bold mt-5 text-white">Top Scores:</h2>
+                                <h2 className="text-2xl font-bold mt-5 text-white">Legjobb pontszámok:</h2>
                                 <ul className="top-scores mt-3">
                                     {topScores
                                         .filter((score: Score) => score.aimScore !== null && score.aimScore !== undefined)
                                         .map((score: Score) => (
-                                        <li key={score.id} className="text-md font-bold text-secondary">
-                                            {score.playerName}: Aim Trainer - {score.aimScore ?? "N/A"}
-                                        </li>
-                                    ))}
+                                            <li key={score.id} className="text-md font-bold text-secondary">
+                                                {score.playerName}: Célozz és találj - {score.aimScore ?? "N/A"}
+                                            </li>
+                                        ))}
                                 </ul>
                             </>
                         ) : (
                             <div className="game-over text-center">
-                                <h2 className="text-4xl font-bold text-red-500 mb-4">Game Over!</h2>
-                                <p className="text-2xl font-bold mb-5 text-white">Your final score: {score}</p>
+                                <h2 className="text-4xl font-bold text-red-500 mb-4">Játék vége!</h2>
+                                <p className="text-2xl font-bold mb-5 text-white">Végső pontszámod: {score}</p>
                                 <button
                                     onClick={restartGame}
                                     className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover:scale-105 transition-transform"
                                 >
-                                    Restart
+                                    Újraindítás
                                 </button>
                             </div>
                         )}
                     </div>
                 ) : (
                     <>
-                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Training Game</h1>
+                        <h1 className="text-4xl font-bold mb-5 text-primary">Aim Trainer</h1>
                         <div className="mb-4">
-                            <span className="text-xl font-bold text-secondary mr-4">Score: {score}</span>
-                            <span className="text-xl font-bold text-secondary font-bold">Time Left: <span className="text-red-500">{timeLeft}s</span></span>
+                            <span className="text-xl font-bold text-secondary mr-4">Pontszám: {score}</span>
+                            <span className="text-xl font-bold text-secondary font-bold">Hátralévő idő: <span className="text-red-500">{timeLeft}s</span></span>
                         </div>
                         <GameArea
                             gameStarted={gameStarted}
@@ -229,4 +229,3 @@ export default function AimTrainingPage() {
         </div>
     );
 }
-
