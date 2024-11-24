@@ -1,0 +1,137 @@
+@startuml
+!define RECTANGLE class
+
+'----------------------
+' Felhasználók és jogosultságok
+'----------------------
+class User {
+  +id: String
+  +name: String
+  +email: String
+  +password: String
+  +role: UserRole
+  +accounts: Account[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+'----------------------
+' Teszt eredmények és ranglista
+'----------------------
+class Scoreboard {
+  +id: Int
+  +playerName: String
+  +score: Int
+  +aimScore: Int
+  +typeScore: Int
+  +createdAt: DateTime
+}
+
+class TestResult {
+  +id: Int
+  +userId: String
+  +testType: String
+  +score: Int
+  +createdAt: DateTime
+}
+
+class Leaderboard {
+  +id: Int
+  +testType: String
+  +userId: String
+  +score: Int
+  +updatedAt: DateTime
+}
+
+'----------------------
+' Kapcsolódó entitások
+'----------------------
+class Account {
+  +id: String
+  +userId: String
+  +type: String
+  +provider: String
+  +providerAccountId: String
+  +refresh_token: String
+  +access_token: String
+  +expires_at: Int
+  +token_type: String
+  +scope: String
+  +id_token: String
+  +session_state: String
+}
+
+class VerificationToken {
+  +id: String
+  +email: String
+  +token: String
+  +expires: DateTime
+}
+
+class PasswordResetToken {
+  +id: String
+  +email: String
+  +token: String
+  +expires: DateTime
+}
+
+'----------------------
+' Kapcsolatok
+'----------------------
+User "1" -- "*" Account : has
+User "1" -- "*" TestResult : creates
+User "1" -- "*" Leaderboard : has
+Leaderboard "*" -- "*" TestResult : is scored by
+
+Account "1" -- "*" VerificationToken : creates
+Account "1" -- "*" PasswordResetToken : creates
+
+'----------------------
+' Szerver oldali API
+'----------------------
+package "API" {
+  class AuthAPI {
+    +login()
+    +register()
+    +resetPassword()
+  }
+
+  class TestAPI {
+    +submitTestResult()
+    +getScoreboard()
+  }
+  
+  class AdminAPI {
+    +manageUsers()
+    +manageTests()
+  }
+  
+  AuthAPI ..> User : authenticates
+  TestAPI ..> TestResult : records
+  AdminAPI ..> User : manages
+  AdminAPI ..> TestResult : views
+}
+
+'----------------------
+' Rendszer egész
+'----------------------
+package "System" {
+  class Frontend {
+    +loginPage()
+    +testPage()
+    +scoreboardPage()
+  }
+  class Backend {
+    +authEndpoints()
+    +testEndpoints()
+    +adminEndpoints()
+  }
+
+  Frontend --> Backend : communicates
+  Backend --> User : handles authentication
+  Backend --> TestResult : saves results
+}
+@enduml
