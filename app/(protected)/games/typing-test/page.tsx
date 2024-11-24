@@ -267,7 +267,7 @@ const TypingChallengeGame: React.FC = () => {
                             {topScores
                                 .filter((score: Score) => score.typeScore !== null && score.typeScore !== undefined)
                                 .map((score: Score) => (
-                                    <li key={score.id} className="text-lg text-primary">
+                                    <li key={score.id} className="text-md font-bold text-secondary">
                                         {score.playerName}: Typing Speed - {score.typeScore ?? "N/A"} WPM
                                     </li>
                                 ))}

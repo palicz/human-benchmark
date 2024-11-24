@@ -193,7 +193,7 @@ export default function AimTrainingPage() {
                                     {topScores
                                         .filter((score: Score) => score.aimScore !== null && score.aimScore !== undefined)
                                         .map((score: Score) => (
-                                        <li key={score.id} className="text-lg text-white">
+                                        <li key={score.id} className="text-md font-bold text-secondary">
                                             {score.playerName}: Aim Trainer - {score.aimScore ?? "N/A"}
                                         </li>
                                     ))}
@@ -201,7 +201,7 @@ export default function AimTrainingPage() {
                             </>
                         ) : (
                             <div className="game-over text-center">
-                                <h2 className="text-4xl font-bold text-black mb-4">Game Over!</h2>
+                                <h2 className="text-4xl font-bold text-red-500 mb-4">Game Over!</h2>
                                 <p className="text-2xl font-bold mb-5 text-white">Your final score: {score}</p>
                                 <button
                                     onClick={restartGame}

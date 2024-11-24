@@ -185,7 +185,7 @@ const MemoryGamePage = () => {
                                 {topScores
                                     .filter((score: Score) => score.score !== null && score.score !== undefined)
                                     .map((score: Score) => (
-                                        <li key={score.id} className="text-lg text-white">
+                                        <li key={score.id} className="text-md font-bold text-secondary">
                                             {score.playerName}: Memory Game - {score.score ?? "N/A"}
                                         </li>
                                     ))}

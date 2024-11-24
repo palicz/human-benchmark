@@ -18,22 +18,18 @@ export default function Home() {
               <span>Aim Trainer</span>
             </Button>
           </Link>
-          <Link href="/games/memory-test">
-            <Button variant="game">
+            <Button disabled variant="unusable2">
               <span>Memory Test</span>
             </Button>
-          </Link>
           <Link href="/games/typing-test">
             <Button variant="game">
               <span>Typing Test</span>
             </Button>
           </Link>
         </div>
-        <Link href="/scoreboard">
-          <Button variant="scoreboard">
+          <Button disabled variant="unusable1">
             <span>Scoreboard</span>
           </Button>
-        </Link>
       </div>
     </div>
   );
