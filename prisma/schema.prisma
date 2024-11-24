@@ -15,10 +15,12 @@ enum UserRole {
 model Scoreboard {
   id         Int      @id @default(autoincrement())
   playerName String   @unique
-  score      Int? // Nullable field for the memory game
-  aimScore   Int? // Nullable field for the aim trainer game
+  score      Int?
+  aimScore   Int?
   typeScore  Int?
   createdAt  DateTime @default(now())
+
+    @@map("scoreboard")
 }
 
 model User {
