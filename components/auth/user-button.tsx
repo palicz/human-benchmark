@@ -13,7 +13,6 @@ import {
     AvatarFallback
 } from "@/components/ui/avatar"
 
-import { FaUser } from "react-icons/fa";
 import { LogOut, Shield, User } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/logout-button";
@@ -28,9 +27,11 @@ export const UserButton = () => {
             <DropdownMenuTrigger>
                 <Avatar className="shadow-sm">
                     <AvatarImage src={user?.image || undefined} alt={user?.name || "Profil"}/>
-                        <AvatarFallback className="bg-slate-800">
-                            <FaUser className="text-white"/>
-                        </AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500">
+                        <span className="text-xl font-bold text-white">
+                            {user?.name?.charAt(0)}
+                        </span>
+                    </AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="end">
