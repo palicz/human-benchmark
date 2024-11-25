@@ -19,7 +19,7 @@ export const UserInfo = ({
                 </p>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="flex flex-row items-center justify-between rounded-lg  bg-white p-3 -2">
+                <div className="flex flex-row items-center justify-between rounded-lg  bg-white p-3">
                     <p className="text-sm font-bold">
                         ID
                     </p>
@@ -39,7 +39,7 @@ export const UserInfo = ({
                     <p className="text-sm font-bold">
                         Email cím
                     </p>
-                    <p className="truncate text-sm max-w-[180px] font-mono p-1 bg-background text-secondary rounded-md">
+                    <p className="truncate text-sm max-w-[300px] font-mono p-1 bg-background text-secondary rounded-md">
                         {user?.email}
                     </p>
                 </div>
