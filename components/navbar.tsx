@@ -13,12 +13,11 @@ export default function SimpleNavbar() {
   const { status } = useSession();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-secondary">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 bg-background2">
         <div className="flex h-14 items-center justify-between py-4">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="h-6 w-6 rounded-full bg-primary" />
-            <span className="font-bold">Human Benchmark</span>
+            <span className="text-3xl tracking-widest font-bold text-white hover-scale">Human Benchmark</span>
           </Link>
           {status === "authenticated" ? (
             <UserButton />

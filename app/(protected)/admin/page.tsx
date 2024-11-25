@@ -19,9 +19,9 @@ const AdminPage = () => {
     }, []);
 
     return (
-        <Card className="w-[800px]">
+        <Card className="w-[1000px] mt-10 bg-secondary border-none">
             <CardHeader>
-                <p className="text-2xl font-semibold text-center">
+                <p className="text-2xl font-semibold text-center text-white">
                     Admin Panel
                 </p>
             </CardHeader>
