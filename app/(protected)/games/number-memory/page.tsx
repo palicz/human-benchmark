@@ -56,8 +56,13 @@ export default function NumberMemoryGame() {
   const [rank, setRank] = useState<number | undefined>();
 
   const generateNumber = (currentLevel: number) => {
-    const length = Math.min(3 + Math.floor(currentLevel / 2), 12);
-    return Array.from({ length }, () => Math.floor(Math.random() * 10)).join("");
+    const length = currentLevel;
+    let number = '';
+    number += Math.floor(Math.random() * 9) + 1;
+    for (let i = 1; i < length; i++) {
+      number += Math.floor(Math.random() * 10);
+    }
+    return number;
   };
 
   const startLevel = () => {
