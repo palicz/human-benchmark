@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Zap, Timer, Trophy, ArrowRight } from "lucide-react";
+import { Brain, Zap, Timer, Trophy, ArrowRight, Crosshair } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
@@ -12,7 +12,7 @@ const games = [
     id: "aim-trainer",
     name: "Aim Trainer",
     description: "Test your reflexes with split-second timing challenges",
-    icon: Zap,
+    icon: Crosshair,
     color: "from-yellow-500 to-orange-500",
     delay: 0.1,
   },
@@ -55,7 +55,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="max-w-7xl mx-auto">
@@ -119,8 +119,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <motion.div
             animate={{
-              boxShadow: highlightGames 
-                ? "0 0 20px 10px rgba(var(--primary-rgb), 0.3)" 
+              boxShadow: highlightGames
+                ? "0 0 20px 10px rgba(var(--primary-rgb), 0.3)"
                 : "none",
             }}
             transition={{ duration: 0.5 }}
@@ -134,7 +134,7 @@ export default function Home() {
             >
               Choose Your Challenge
             </motion.h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {games.map((game) => (
                 <motion.div
