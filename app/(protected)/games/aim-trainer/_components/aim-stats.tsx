@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Crosshair, Trophy, Star, Clock } from 'lucide-react';
-import { Card } from "@/components/ui/card";
+import { Card } from "@/app/(protected)/games/aim-trainer/_components/aim-card";
 
 interface AimStatsProps {
   score: number;
@@ -56,7 +56,7 @@ export function AimStats({ score, highScore, timeLeft, rank }: AimStatsProps) {
 </div>
             <div>
               <p className="text-sm text-muted-foreground">{stat.label}</p>
-              <p className="text-2xl font-bold">{stat.value}</p>
+              <p className="text-xl font-bold">{stat.value}</p>
             </div>
           </div>
         </Card>

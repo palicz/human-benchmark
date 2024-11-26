@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crosshair, ArrowRight, CircleUser } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/app/(protected)/games/aim-trainer/_components/aim-button";
+import { Card } from "@/app/(protected)/games/aim-trainer/_components/aim-card";
 import confetti from 'canvas-confetti';
 import { Navbar } from "@/components/layout/navbar";
 import { useSession } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
-import { AimStats } from "./_components/aim-stats";
+import { AimStats } from "@/app/(protected)/games/aim-trainer/_components/aim-stats";
 
 type GameState = "ready" | "playing" | "gameover";
 
