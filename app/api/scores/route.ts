@@ -43,20 +43,19 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-        // Fetch top scores
-        try {
-            const topScores = await prisma.scoreboard.findMany({
-                orderBy: [
-                    {score: 'desc' },
-                    {aimScore:'desc'},
-                    {typeScore:'desc'}
+    try {
+        const scores = await prisma.scoreboard.findMany({
+            orderBy: [
+                {score: 'desc' },
+                {aimScore:'desc'},
+                {typeScore:'desc'}
             ],
-                take: 10,
-            });
-            return NextResponse.json(topScores);
-
-        } catch (error) {
-            console.error("Error fetching scores:", error);
-            return NextResponse.json({ error: 'Error fetching scores' }, { status: 500 });
+            take: 10,
+        });
+        
+        return NextResponse.json(scores);
+    } catch (error) {
+        console.error("Error fetching scores:", error);
+        return new NextResponse("Internal Error", { status: 500 });
     }
 }

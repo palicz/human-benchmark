@@ -22,11 +22,12 @@ const buttonVariants = cva(
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:
-          "bg-secondary text-white shadow-sm hover:bg-secondary/80 w-[200px] h-[150px] m-5",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         scoreboard:
           "bg-secondary border-4 text-xl border-secondary text-white shadow-sm w-[250px] !h-[250px] m-5 hover-scale font-bold",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        success: "border-transparent bg-green-500 text-white hover:bg-green-600",
       },
       size: {
         default: "h-9 px-4 py-2",
