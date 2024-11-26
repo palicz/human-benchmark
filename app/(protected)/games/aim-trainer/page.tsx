@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crosshair, ArrowRight, CircleUser } from 'lucide-react';
 import { Button } from "@/app/(protected)/games/aim-trainer/_components/aim-button";
