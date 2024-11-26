@@ -1,234 +1,412 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Brain, ArrowRight } from "lucide-react";
+import { Button } from "@/app/(protected)/games/number-memory/_components/memory-button";
+import { Card } from "@/app/(protected)/games/number-memory/_components/memory-card";
+import { Input } from "@/app/(protected)/games/number-memory/_components/memory-input";
+import { Navbar } from "@/components/layout/navbar";
 import { useSession } from "next-auth/react";
+import confetti from 'canvas-confetti';
+import { Badge } from "@/components/ui/badge";
+import { MemoryStats } from "./_components/memory-stats";
 
-interface Score {
-    id: number;
-    playerName: string;
-    score: number;
-    createdAt: string;
-}
-const MemoryGamePage = () => {
-    const [currentNumber, setCurrentNumber] = useState('');
-    const [playerInput, setPlayerInput] = useState('');
-    const [score, setScore] = useState(0);
-    const [showNumber, setShowNumber] = useState(true);
-    const [gameOver, setGameOver] = useState(false);
-    const [gameStarted, setGameStarted] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(5);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const countdownRef = useRef<NodeJS.Timeout | null>(null);
-    const [topScores, setTopScores] = useState<Score[]>([]);
-    const { data: session, status } = useSession();
+type GameState = "ready" | "memorize" | "recall" | "feedback" | "gameover";
 
-    const fetchTopScores = async () => {
-        try {
-            const response = await fetch('/api/scores');
-            if (!response.ok) {
-                throw new Error(`HTTP hiba! státusz: ${response.status}`);
-            }
-            const data = await response.json();
-            setTopScores(data);
-        } catch (error) {
-            console.error("Hiba a legjobb eredmények lekérésekor:", error);
-        }
-    };
+const startInfiniteConfetti = () => {
+  let frameId: number;
+  const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+  
+  const frame = () => {
+    confetti({
+      particleCount: 2,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0 },
+      colors: colors
+    });
+    
+    confetti({
+      particleCount: 2,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1 },
+      colors: colors
+    });
 
-    const saveScoreToDatabase = async () => {
-        try {
-            if (status === "authenticated" && session?.user?.name) {
-                const userName = session.user.name;
-                const payload = { name: userName, score };
-                const response = await fetch('/api/scores', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP hiba! státusz: ${response.status}`);
-                }
-                const result = await response.json();
-            }
-        } catch (error) {
-            console.error("Hiba az eredmény mentésekor:", error);
-        }
-    };
+    frameId = requestAnimationFrame(frame);
+  };
 
-    const generateNextNumber = (newScore: number) => {
-        setPlayerInput('');
-        const length = newScore + 1;
-        let newNumber = '';
-        for (let i = 0; i < length; i++) {
-            if (i === 0) {
-                newNumber += (Math.floor(Math.random() * 9) + 1).toString();
-            } else {
-                newNumber += Math.floor(Math.random() * 10).toString();
-            }
-        }
-        setCurrentNumber(newNumber);
-        setShowNumber(true);
-        setTimeLeft(5);
-    };
+  frame();
 
-    const startNumberTimer = () => {
-        resetTimers();
-
-        countdownRef.current = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev > 1) {
-                    return prev - 1;
-                } else {
-                    clearInterval(countdownRef.current!);
-                    return 0;
-                }
-            });
-        }, 1000);
-
-        timerRef.current = setTimeout(() => {
-            setShowNumber(false);
-            clearInterval(countdownRef.current!);
-        }, 5000);
-    };
-
-    const resetTimers = () => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-            timerRef.current = null;
-        }
-        if (countdownRef.current) {
-            clearInterval(countdownRef.current);
-            countdownRef.current = null;
-        }
-    };
-
-    const startGame = () => {
-        setGameStarted(true);
-        setScore(0);
-        setGameOver(false);
-        generateNextNumber(0);
-        startNumberTimer();
-    };
-
-    const checkInput = async () => {
-        if (playerInput === currentNumber) {
-            setScore((prevScore) => prevScore + 1);
-        } else {
-            await saveScoreToDatabase();
-            setGameOver(true);
-            resetTimers();
-        }
-    };
-
-    const restartGame = () => {
-        setGameStarted(true);
-        setScore(0);
-        setGameOver(false);
-        generateNextNumber(0);
-        startNumberTimer();
-    };
-
-    useEffect(() => {
-        if (!gameOver && gameStarted) {
-            generateNextNumber(score);
-            startNumberTimer();
-        }
-    }, [score]);
-
-    useEffect(() => {
-        return () => {
-            resetTimers();
-        };
-    }, []);
-    useEffect(() => {
-        if (!gameStarted) {
-            fetchTopScores();
-        }
-    }, [gameStarted]);
-
-    return (
-        <div className="min-h-screen w-full flex items-center justify-center bg-white">
-            <div className="game-container text-center p-5">
-                <div className="border-4 border-primary px-10 py-10 rounded-xl bg-primary">
-                    {!gameStarted ? (
-                        <div className="start-screen text-center max-w-xl w-full">
-                            <h1 className="text-4xl font-bold mb-5 text-white tracking-widest">Number Memory Test</h1>
-                            <p className="w-full justify-self-center text-xl text-white mb-5">A Number Memory Test-ben egy szám jelenik meg, ami egyjegyűvel kezdődik, és folyamatosan nő a hossza. 5 másodperced van megjegyezni, mielőtt be kell gépelned emlékezetből.</p>
-                            <button
-                                onClick={startGame}
-                                className="px-4 py-2 rounded-md text-xl font-bold text-background bg-secondary border-2 border-primary hover:bg-background hover:text-secondary hover-scale"
-                            >
-                                Indítás
-                            </button>
-                            <h2 className="text-2xl font-bold mt-5 text-white">Legjobb Eredmények:</h2>
-                            <ul className="top-scores mt-3">
-                                {topScores
-                                    .filter((score: Score) => score.score !== null && score.score !== undefined)
-                                    .map((score: Score) => (
-                                        <li key={score.id} className="text-md font-bold text-secondary">
-                                            {score.playerName}: Number Memory Test - {score.score ?? "N/A"}
-                                        </li>
-                                    ))}
-                            </ul>
-                        </div>
-                    ) : (
-                        <div className="game-screen text-center max-w-xl w-full">
-                            <h1 className="text-4xl font-bold mb-5 text-white">Number Memory Test</h1>
-
-                            {!gameOver ? (
-                                <>
-                                    {showNumber ? (
-                                        <div className="number-display text-4xl font-bold my-5 text-white">
-                                            <p className="text-secondary">{currentNumber}</p>
-                                            <p className="text-xl font-bold mt-3">Hátralévő idő: <span className="text-xl font-bold text-red-500">{timeLeft} mp</span></p>
-                                        </div>
-                                    ) : (
-                                        <div className="input-section my-5 flex-col">
-                                            <label htmlFor="playerInput" className="block text-xl font-bold mb-2 text-white">
-                                                Írd be a számot:
-                                            </label>
-                                            <input
-                                                id="playerInput"
-                                                type="text"
-                                                className="text-secondary text-md font-bold border-4 border-white p-2 rounded"
-                                                value={playerInput}
-                                                onChange={(e) => setPlayerInput(e.target.value)}
-                                                onKeyDown={(e) => {
-                                                    if (e.key === "Enter") {
-                                                      checkInput();
-                                                    }
-                                                  }}
-                                            />
-                                            <button
-                                                onClick={checkInput}
-                                                className="ml-3 px-4 py-2 rounded text-white text-xl font-bold bg-secondary hover:bg-white hover:text-secondary hover-scale"
-                                            >
-                                                Beküldés
-                                            </button>
-                                        </div>
-                                    )}
-                                    <p className="text-xl font-bold mt-5 text-white">Pontszám: {score}</p>
-                                </>
-                            ) : (
-                                <div className="game-over text-center mt-5">
-                                    <h2 className="text-2xl font-bold text-red-500 mb-4">Játék vége!</h2>
-                                    <p className="text-xl font-bold mb-5 text-white">Végső pontszámod: {score}</p>
-                                    <button
-                                        onClick={restartGame}
-                                        className="px-4 py-2 rounded text-xl font-bold text-white bg-secondary hover:bg-white hover:text-secondary hover-scale"
-                                    >
-                                        Újrajátszás
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
+  return () => cancelAnimationFrame(frameId);
 };
 
-export default MemoryGamePage;
+export default function NumberMemoryGame() {
+  const [gameState, setGameState] = useState<GameState>("ready");
+  const [currentNumber, setCurrentNumber] = useState("");
+  const [userInput, setUserInput] = useState("");
+  const [level, setLevel] = useState(1);
+  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [highScore, setHighScore] = useState<number | null>(null);
+  const { data: session } = useSession();
+  const [isConfettiActive, setIsConfettiActive] = useState(false);
+  const [rank, setRank] = useState<number | undefined>();
+
+  const generateNumber = (currentLevel: number) => {
+    const length = Math.min(3 + Math.floor(currentLevel / 2), 12);
+    return Array.from({ length }, () => Math.floor(Math.random() * 10)).join("");
+  };
+
+  const startLevel = () => {
+    const newNumber = generateNumber(level);
+    setCurrentNumber(newNumber);
+    setGameState("memorize");
+    setTimeLeft(Math.min(7, 3 + Math.floor(level / 4)));
+  };
+
+  const saveScore = async () => {
+    if (!session?.user?.name) return;
+    
+    try {
+      const response = await fetch('/api/scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: session.user.name,
+          score: score
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save score');
+      }
+
+      if (score > (highScore ?? 0)) {
+        setHighScore(score);
+      }
+      const rankResponse = await fetch('/api/user-scores');
+      if (rankResponse.ok) {
+        const data = await rankResponse.json();
+        setRank(data.ranks.memoryRank);
+      }
+    } catch (error) {
+      console.error('Error saving score:', error);
+    }
+  };
+
+  const triggerConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 }
+    };
+
+    function fire(particleRatio: number, opts: confetti.Options) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+        spread: 90,
+        scalar: 1.2,
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+
+    fire(0.2, {
+      spread: 60,
+    });
+
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  };
+
+  const checkAnswer = async () => {
+    if (userInput === currentNumber) {
+      const newScore = score + 100;
+      setScore(newScore);
+      setLevel(level + 1);
+      
+      if (highScore !== null && newScore > highScore) {
+        triggerConfetti();
+      }
+      
+      setUserInput("");
+      setGameState("ready");
+    } else {
+      setGameState("gameover");
+      await saveScore();
+    }
+  };
+
+  const fetchHighScore = async () => {
+    if (!session?.user?.name) return;
+    
+    try {
+      const response = await fetch('/api/user-scores');
+      if (response.ok) {
+        const data = await response.json();
+        setHighScore(data.score);
+        setRank(data.ranks.memoryRank);
+      }
+    } catch (error) {
+      console.error('Error fetching high score:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHighScore();
+  }, [session, score]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (gameState === "memorize" && timeLeft > 0) {
+      timer = setTimeout(() => {
+        setTimeLeft(timeLeft - 1);
+      }, 1000);
+    } else if (gameState === "memorize" && timeLeft === 0) {
+      setGameState("recall");
+    }
+
+    return () => clearTimeout(timer);
+  }, [gameState, timeLeft]);
+
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+
+    if (gameState === "gameover" && score > (highScore ?? 0)) {
+      setIsConfettiActive(true);
+      cleanup = startInfiniteConfetti();
+    }
+
+    return () => {
+      if (cleanup) cleanup();
+      setIsConfettiActive(false);
+    };
+  }, [gameState, score, highScore]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+      <Navbar />
+      
+      <div className="container max-w-4xl mx-auto pt-24 px-6 pb-16 relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-8"
+        >
+          {/* Game Header */}
+          <div className="text-center space-y-4">
+            <motion.div
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              className="inline-block"
+            >
+              <div className="p-3 rounded-full bg-gradient-to-r from-blue-500/20 to-indigo-500/20 inline-block">
+                <Brain className="w-8 h-8 text-blue-500" />
+              </div>
+            </motion.div>
+            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-500">
+              Number Memory Test
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Remember the number sequence and type it back correctly
+            </p>
+          </div>
+
+          {/* Game Stats */}
+          <MemoryStats
+            score={score}
+            highScore={highScore}
+            level={level}
+            rank={rank}
+          />
+
+          {/* Game Area */}
+          <Card className="p-8">
+            <AnimatePresence mode="wait">
+              {gameState === "ready" && (
+                <motion.div
+                  key="ready"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center space-y-6"
+                >
+                  <h2 className="text-2xl font-semibold">Ready to continue?</h2>
+                  <p className="text-muted-foreground">Current Score: {score}</p>
+                  <Button onClick={startLevel} size="lg">
+                    Start
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </motion.div>
+              )}
+
+              {gameState === "memorize" && (
+                <motion.div
+                  key="memorize"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="text-center space-y-6"
+                >
+                  <div 
+                    className="text-6xl font-mono font-bold tracking-wider select-none"
+                    onCopy={(e) => e.preventDefault()}
+                  >
+                    {currentNumber}
+                  </div>
+                  <motion.div
+                    className="w-full bg-secondary h-2 rounded-full overflow-hidden"
+                    initial={{ scaleX: 1 }}
+                    animate={{ scaleX: 0 }}
+                    transition={{ duration: timeLeft, ease: "linear" }}
+                  />
+                </motion.div>
+              )}
+
+              {gameState === "recall" && (
+                <motion.div
+                  key="recall"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="space-y-6"
+                >
+                  <div className="text-center">
+                    <h2 className="text-2xl font-semibold mb-4">What was the number?</h2>
+                    <Input
+                      type="number"
+                      value={userInput}
+                      onChange={(e) => setUserInput(e.target.value)}
+                      className="text-center text-2xl max-w-[200px] mx-auto [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      autoFocus
+                    />
+                  </div>
+                  <div className="flex justify-center">
+                    <Button onClick={checkAnswer} size="lg">
+                      Submit Answer
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {gameState === "gameover" && (
+                <motion.div
+                  key="gameover"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center space-y-6"
+                >
+                  {score >= (highScore ?? 0) ? (
+                    <motion.div
+                      initial={{ scale: 0.8 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", duration: 0.5 }}
+                      className="space-y-6"
+                    >
+                      <h2 className="text-4xl font-bold text-primary">
+                        🎉 New High Score! 🎉
+                      </h2>
+
+                      <div className="space-y-4">
+                        <Badge variant="default" className="text-2xl px-6 py-3 bg-primary hover:bg-primary">
+                          Final Score: {score}
+                        </Badge>
+
+                        <div className="flex flex-col items-center gap-2">
+                          <Badge variant="outline" className="text-xl px-4 py-2">
+                            Previous Best: {highScore}
+                          </Badge>
+
+                          {highScore !== null && score > highScore && (
+                            <Badge variant="secondary" className="text-xl px-4 py-2 bg-green-500/20 text-green-500">
+                              +{score - highScore} points improvement!
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+
+                    </motion.div>
+                  ) : (
+                    <div className="space-y-6">
+                      <h2 className="text-2xl font-semibold text-destructive">Game Over</h2>
+                      <div className="space-y-4">
+                        <Badge variant="default" className="text-2xl px-6 py-3">
+                          Final Score: {score}
+                        </Badge>
+                        
+                        {highScore !== null && (
+                          <div className="flex flex-col items-center gap-2">
+                            <Badge variant="outline" className="text-xl px-4 py-2">
+                              Personal Best: {highScore}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              Keep practicing! You're just {highScore - score} points away from your best score.
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  
+                  <Button
+                        onClick={() => {
+                          setScore(0);
+                          setLevel(1);
+                          setGameState("ready");
+                          setUserInput("");
+                        }}
+                        size="lg"
+                        className="mt-4"
+                      >
+                        Play Again
+                        <ArrowRight className="ml-2 w-4 h-4" />
+                      </Button>
+                      
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Card>
+
+          {/* Game Instructions */}
+          <Card className="p-6 bg-secondary/50">
+            <h3 className="font-semibold mb-2">How to Play</h3>
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+              <li>Memorize the number shown on screen</li>
+              <li>Type the exact number sequence when prompted</li>
+              <li>Numbers get longer as you progress</li>
+              <li>Make a mistake and the game ends</li>
+            </ul>
+          </Card>
+          
+        </motion.div>
+      </div>
+    </div>
+  );
+}
