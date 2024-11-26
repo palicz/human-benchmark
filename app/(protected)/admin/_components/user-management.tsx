@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Trophy, Zap, Brain, User, Timer, Shield } from "lucide-react";
+import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Trophy,  Brain, User, Timer, Shield, Crosshair } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
@@ -281,7 +281,7 @@ export function UserManagement() {
                 <Card className="p-4 border border-border">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 rounded-full bg-yellow-500/10">
-                      <Zap className="h-4 w-4 text-yellow-500" />
+                      <Crosshair className="h-4 w-4 text-yellow-500" />
                     </div>
                     <h4 className="font-medium">Aim Trainer</h4>
                   </div>

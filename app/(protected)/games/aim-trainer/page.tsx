@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crosshair, ArrowRight, CircleUser } from 'lucide-react';
+import { Crosshair, ArrowRight, Target } from 'lucide-react';
 import { Button } from "@/app/(protected)/games/aim-trainer/_components/aim-button";
 import { Card } from "@/app/(protected)/games/aim-trainer/_components/aim-card";
 import confetti from 'canvas-confetti';
@@ -256,10 +256,10 @@ export default function AimTrainerGame() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="relative h-[600px] bg-black rounded-lg overflow-hidden cursor-crosshair"
+                                    className="relative h-[600px] bg-gradient-to-r from-cyan-500/40 to-blue-500/40 rounded-lg overflow-hidden cursor-crosshair"
                                 >
                                     <motion.div
-                                        className="absolute text-red-500"
+                                        className="absolute text-black"
                                         style={{
                                             left: `${targetPosition.x}%`,
                                             top: `${targetPosition.y}%`,
@@ -271,7 +271,7 @@ export default function AimTrainerGame() {
                                         animate={{ scale: 1 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 10 }}
                                     >
-                                        <CircleUser className="w-full h-full" />
+                                        <Target className="w-full h-full" />
                                     </motion.div>
                                 </motion.div>
                             )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Zap, Timer, Trophy, ArrowRight, Crosshair } from "lucide-react";
+import { Brain, Timer, Trophy, ArrowRight, Crosshair } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
