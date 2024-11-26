@@ -6,6 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const games = [
   {
@@ -113,6 +119,32 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Science Behind The Tests</AccordionTrigger>
+        <AccordionContent>
+        The tests, including the Number Memory Test, Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Cognitive Benefits of Training</AccordionTrigger>
+        <AccordionContent>
+        Engaging in cognitive training exercises, such as those offered in our tests, can lead to significant improvements in memory, attention, and processing speed. Regular practice not only enhances these skills but also promotes overall brain health and resilience against cognitive decline.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-3">
+        <AccordionTrigger>User Progress Tracking</AccordionTrigger>
+        <AccordionContent>
+        Our platform provides users with detailed progress tracking, allowing them to monitor their performance over time across various tests. This feature enables users to identify strengths and areas for improvement, fostering a personalized training experience that adapts to their evolving needs.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-4">
+        <AccordionTrigger>Tips for Improving Performance</AccordionTrigger>
+        <AccordionContent>
+        To maximize your performance in our tests, consider incorporating regular practice sessions, maintaining a healthy lifestyle, and utilizing memory techniques such as visualization and chunking. Additionally, staying focused and minimizing distractions during training can significantly enhance your results and overall cognitive function.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
 
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
