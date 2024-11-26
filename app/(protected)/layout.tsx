@@ -7,10 +7,9 @@ interface ProtectedLayoutProps {
 }
 
 export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
-  
     return (
-            <body className={inter.className}>
-                {children}
-            </body>
+        <div className={inter.className}>
+            {children}
+        </div>
     );
 }

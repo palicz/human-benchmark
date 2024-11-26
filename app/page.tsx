@@ -22,7 +22,7 @@ const games = [
     description: "Challenge your memory with increasingly complex numbers",
     icon: Brain,
     color: "from-blue-500 to-indigo-500",
-    delay: 0.1,
+    delay: 0.2,
   },
   {
     id: "typing-test",
@@ -30,7 +30,7 @@ const games = [
     description: "Test your typing speed and accuracy",
     icon: Timer,
     color: "from-green-500 to-emerald-500",
-    delay: 0.1,
+    delay: 0.3,
   },
   {
     id: "memory-test",
@@ -38,7 +38,7 @@ const games = [
     description: "Challenge your memory with pattern recognition",
     icon: Trophy,
     color: "from-purple-500 to-pink-500",
-    delay: 0.1,
+    delay: 0.4,
   },
 ];
 
@@ -64,14 +64,24 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center space-y-6"
           >
-            <motion.h1
-              initial={{ scale: 0.8 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600"
-            >
-              Challenge Your Brain
-            </motion.h1>
+            <div className="relative h-24 flex items-center justify-center">
+              <motion.div
+                initial={{ opacity: 1, scale: 1 }}
+                animate={{ opacity: 0, scale: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="absolute"
+              >
+                <Brain className="w-20 h-20 text-primary" />
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8 }}
+                className="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600"
+              >
+                Challenge Your Brain
+              </motion.h1>
+            </div>
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
