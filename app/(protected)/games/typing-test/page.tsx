@@ -187,8 +187,8 @@ export default function TypingSpeedTestGame() {
                                     exit={{ opacity: 0 }}
                                     className="text-center space-y-6"
                                 >
-                                    <div className="relative h-auto bg-grey-500/30 overflow-hidden text-2xl font-semibold flex justify-center items-center">
-                                        <span className="text-4xl">
+                                    <div className="relative h-auto bg-grey-500/30 overflow-hidden text-2xl font-semibold flex justify-center items-center ">
+                                        <span className="text-4xl select-none">
                                             {Array.from(remainingWords[currentWordIndex]).map((letter, index) => {
                                                 const inputLetter = inputValue[index];
                                                 const isCorrect = inputLetter === letter;
