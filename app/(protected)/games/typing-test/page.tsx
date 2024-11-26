@@ -7,9 +7,21 @@ import { Button } from "@/app/(protected)/games/typing-test/_components/typing-b
 import { Card } from "@/app/(protected)/games/typing-test/_components/typing-card";
 import { Input } from "@/app/(protected)/games/typing-test/_components/typing-input";
 import { TypingStats } from "@/app/(protected)/games/typing-test/_components/typing-stats";
+import { Progress } from "@/components/ui/progress"
 import { useSession } from "next-auth/react";
+import { Navbar } from "@/components/layout/navbar";
 
-const words = ["hello", "world", "react", "javascript", "typing", "speed", "test", "game"];
+const words = ["ability", "able", "about", "above", "accept", "according", "account", "across", "action", "actually", "add", "address", "administration", "admit", "adult", "affect", "after", "again", "against", "age", "agency", "agent", "ago", "agree", "agreement", "ahead", "air", "all", "allow", "almost", "alone", "along", "already", "also", "although", "always", "American", "among", "amount", "analysis", "and", "animal", "another", "answer", "any", "anyone", "anything", "appear", "apply", "approach", "area", "argue", "arm", "around", "arrive", "article", "artist", "ask", "assume", "attack", "attention", "attorney", "audience", "author", "available", "avoid", "away", "baby", "back", "bad", "bag", "ball", "bank", "bar", "base", "beautiful", "because", "become", "bed", "before", "begin", "behavior", "behind", "believe", "benefit", "best", "better", "between", "beyond", "big", "bill", "billion", "bit", "black", "blood", "blue", "board", "body", "book", "born", "both", "box", "boy", "break", "bring", "brother", "budget", "build", "building", "business", "buy", "call", "camera", "campaign", "can", "cancer", "candidate", "capital", "car", "card", "care", "career", "carry", "case", "catch", "cause", "cell", "center", "central", "century", "certain", "certainly", "chair", "challenge", "chance", "change", "character", "charge", "check", "child", "choice", "choose", "church", "citizen", "city", "civil", "claim", "class", "clear", "clearly", "close", "coach", "cold", "collection", "college", "color", "come", "commercial", "common", "community", "company", "compare", "computer", "concern", "condition", "conference", "Congress", "consider", "consumer", "contain", "continue", "control", "cost", "could", "country", "couple", "course", "court", "cover", "create", "crime", "cultural", "culture", "cup", "current", "customer", "cut", "dark", "data", "daughter", "day", "dead", "deal", "death", "debate", "decade", "decide", "decision", "deep", "defense", "degree", "Democrat", "democratic", "describe", "design", "despite", "detail", "determine", "develop", "development", "die", "difference", "different", "difficult", "dinner", "direction", "director", "discover", "discuss", "discussion", "disease", "do", "doctor", "dog", "door", "down", "draw", "dream", "drive", "drop", "drug", "during", "each", "early", "east", "easy", "economic", "economy", "edge", "education", "effect", "effort", "eight", "either", "election", "else", "employee", "end", "energy", "enjoy", "enough", "enter", "entire", "environment", "environmental", "especially", "establish", "even", "evening", "event", "ever", "every", "everybody", "everyone", "everything", "evidence", "exactly", "example", "executive", "exist", "expect", "experience", "expert", "explain", "eye", "face", "fact", "factor", "fail", "fall", "family", "far", "fast", "father", "fear", "federal", "feel", "feeling", "few", "field", "fight", "figure", "fill", "film", "final", "finally", "financial", "find", "fine", "finger", "finish", "fire", "firm", "first", "fish", "five", "floor", "fly", "focus", "follow", "food", "foot", "for", "force", "foreign", "forget", "form", "former", "forward", "four", "free", "friend", "from", "front", "full", "fund", "future", "game", "garden", "gas", "general", "generation", "get", "girl", "give", "glass", "go", "goal", "good", "government", "great", "green", "ground", "group", "grow", "growth", "guess", "gun", "guy", "hair", "half", "hand", "hang", "happen", "happy", "hard", "have", "head", "health", "hear", "heart", "heat", "heavy", "help", "her", "here", "herself", "high", "him", "himself", "his", "history", "hit", "hold", "home", "hope", "hospital", "hot", "hotel", "hour", "house", "how", "however", "huge", "human", "hundred", "husband", "idea", "identify", "if", "image", "imagine", "impact", "important", "improve", "in", "include", "including", "increase", "indeed", "indicate", "individual", "industry", "information", "inside", "instead", "institution", "interest", "interesting", "international", "interview", "into", "investment", "involve", "issue", "it", "item", "its", "itself", "job", "join", "just"];
+
+const totalWords = 60;
+
+const shuffleArray = (array: string[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
 
 export default function TypingSpeedTestGame() {
     const [gameState, setGameState] = useState<"ready" | "playing" | "gameover">("ready");
@@ -20,32 +32,28 @@ export default function TypingSpeedTestGame() {
     const [startTime, setStartTime] = useState<number | null>(null);
     const [highScore, setHighScore] = useState<number | null>(null);
     const [rank, setRank] = useState<number | null>(null);
-    const [remainingWords, setRemainingWords] = useState(words);
+    const [remainingWords, setRemainingWords] = useState<string[]>([]);
 
     const startGame = () => {
+        const shuffledWords = shuffleArray([...words]);
+        setRemainingWords(shuffledWords.slice(0, totalWords));
         setGameState("playing");
         setCurrentWordIndex(0);
         setInputValue("");
         setStartTime(Date.now());
-        setRemainingWords(words);
     };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setInputValue(value);
-
-        if (value.endsWith(" ")) {
-            const typedWord = value.trim();
-            if (typedWord === remainingWords[currentWordIndex]) {
-                setCurrentWordIndex((prevIndex) => prevIndex + 1);
-                setInputValue("");
-
-                if (currentWordIndex + 1 >= remainingWords.length) {
-                    setGameState("gameover");
-                    saveScore();
-                }
-            } else {
-                setInputValue("");
+    
+        if (value === remainingWords[currentWordIndex]) {
+            setCurrentWordIndex((prevIndex) => prevIndex + 1);
+            setInputValue("");
+    
+            if (currentWordIndex + 1 >= remainingWords.length) {
+                setGameState("gameover");
+                saveScore();
             }
         }
     };
@@ -115,9 +123,12 @@ export default function TypingSpeedTestGame() {
         fetchHighScore();
     }, [session, wpm]);
 
+    const progressValue = (currentWordIndex / totalWords) * 100;
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
-            <div className="container max-w-10xl mx-auto pt-24 px-6 pb-16 relative">
+            <Navbar />
+            <div className="container max-w-4xl mx-auto pt-24 px-6 pb-16 relative">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -138,7 +149,7 @@ export default function TypingSpeedTestGame() {
                             Typing Speed Test
                         </h1>
                         <p className="text-muted-foreground max-w-2xl mx-auto">
-                            Type the words as fast as you can!
+                            Type the word as fast as you can!
                         </p>
                     </div>
                     {/* Game Stats */}
@@ -176,26 +187,28 @@ export default function TypingSpeedTestGame() {
                                     exit={{ opacity: 0 }}
                                     className="text-center space-y-6"
                                 >
-                                    <div className="text-2xl font-semibold">
-                                        {remainingWords.map((word, index) => (
-                                            <span key={index} className="mr-2">
-                                                {index === currentWordIndex ? (
-                                                    Array.from(word).map((letter, letterIndex) => (
-                                                        <span key={letterIndex} className={inputValue[letterIndex] === letter ? "text-green-500" : inputValue[letterIndex] !== undefined ? "text-red-500" : ""}>
-                                                            {letter}
-                                                        </span>
-                                                    ))
-                                                ) : (
-                                                    <span>{word}</span>
-                                                )}
-                                            </span>
-                                        ))}
+                                    <div className="relative h-auto bg-grey-500/30 overflow-hidden text-2xl font-semibold flex justify-center items-center">
+                                        <span className="text-4xl">
+                                            {Array.from(remainingWords[currentWordIndex]).map((letter, index) => {
+                                                const inputLetter = inputValue[index];
+                                                const isCorrect = inputLetter === letter;
+                                                const isIncorrect = inputLetter !== undefined && !isCorrect;
+
+                                                return (
+                                                    <span key={index} className={isCorrect ? "text-green-500" : isIncorrect ? "text-red-500" : ""}>
+                                                        {letter}
+                                                    </span>
+                                                );
+                                            })}
+                                        </span>
                                     </div>
                                     <Input
                                         value={inputValue}
                                         onChange={handleInputChange}
-                                        className="mt-4"
+                                        className="mt-4 text-center text-2xl font-bold opacity-30"
+                                        autoFocus
                                     />
+                                    <Progress value={progressValue} />
                                 </motion.div>
                             )}
 
@@ -207,7 +220,7 @@ export default function TypingSpeedTestGame() {
                                     exit={{ opacity: 0 }}
                                     className="text-center space-y-6"
                                 >
-                                    <h2 className="text-2xl font-semibold text-destructive">Game Over</h2>
+                                    <h2 className="text-4xl font-semibold text-green-500">Good Job!</h2>
                                     <div className="space-y-4">
                                         <p className="text-xl">Your WPM: {wpm}</p>
                                         <Button
@@ -216,7 +229,7 @@ export default function TypingSpeedTestGame() {
                                                 setInputValue("");
                                                 setCurrentWordIndex(0);
                                                 setWpm(0);
-                                                setRemainingWords(words);
+                                                setRemainingWords([]);
                                             }}
                                             size="lg"
                                             className="mt-4"
@@ -234,10 +247,11 @@ export default function TypingSpeedTestGame() {
                     <Card className="p-6 bg-secondary/50">
                         <h3 className="font-semibold mb-2">How to Play</h3>
                         <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                            <li>Type the words as they appear on the screen</li>
-                            <li>Each correct letter will turn green, incorrect letters will turn red</li>
-                            <li>The game ends when you type all the words</li>
+                            <li>Type the word as it appears on the screen</li>
+                            <li>Press space to submit your answer</li>
+                            <li>The game ends when you type all the 60 words</li>
                             <li>Try to achieve the highest WPM!</li>
+                            <li>The bar under will show your progress across the words!</li>
                         </ul>
                     </Card>
                 </motion.div>
