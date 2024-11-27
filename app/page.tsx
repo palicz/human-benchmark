@@ -49,6 +49,27 @@ const games = [
   },
 ];
 
+
+const generateFloatingIcons = () => {
+  const positions = [
+    { x: 15, y: 25 }, { x: 35, y: 45 }, { x: 55, y: 15 }, 
+    { x: 75, y: 65 }, { x: 25, y: 85 }, { x: 45, y: 35 },
+    { x: 65, y: 75 }, { x: 85, y: 25 }, { x: 20, y: 55 },
+    { x: 40, y: 15 }, { x: 60, y: 85 }, { x: 80, y: 45 },
+    { x: 30, y: 65 }, { x: 50, y: 35 }, { x: 70, y: 95 }
+  ];
+
+  return positions.map((pos, i) => ({
+    icon: [Brain, Crosshair, Timer, Eye][i % 4],
+    initialX: pos.x,
+    initialY: pos.y,
+    duration: 15 + (i * 1.5),
+    delay: -1 * (i * 1.3),
+  }));
+};
+
+const floatingIcons = generateFloatingIcons();
+
 export default function Home() {
   const [highlightGames, setHighlightGames] = useState(false);
 
@@ -62,6 +83,27 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      {/* Floating Background Icons */}
+      {floatingIcons.map((item, index) => (
+        <motion.div
+          key={index}
+          className="absolute opacity-5 pointer-events-none"
+          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
+          animate={{
+            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
+            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+            delay: item.delay,
+          }}
+        >
+          <item.icon className="w-12 h-12" />
+        </motion.div>
+      ))}
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
@@ -174,6 +216,27 @@ export default function Home() {
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
+          {/* Floating Background Icons */}
+      {floatingIcons.map((item, index) => (
+        <motion.div
+          key={index}
+          className="absolute opacity-5 pointer-events-none"
+          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
+          animate={{
+            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
+            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+            delay: item.delay,
+          }}
+        >
+          <item.icon className="w-12 h-12" />
+        </motion.div>
+      ))}
           <motion.div
             animate={{
               boxShadow: highlightGames

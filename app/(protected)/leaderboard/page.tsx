@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Timer, Eye, Search, Medal, Crown, Star, Crosshair } from "lucide-react";
+import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Input } from "@/app/(protected)/leaderboard/_components/leaderboard-input";
 import { Card } from "@/app/(protected)/leaderboard/_components/leaderboard-card";
@@ -164,7 +164,7 @@ export default function LeaderboardPage() {
                 className="inline-block"
               >
                 <div className="relative">
-                  <Eye className="w-16 h-16 text-primary mx-auto" />
+                  <Trophy className="w-16 h-16 text-primary mx-auto" />
                   <motion.div
                     className="absolute -top-1 -right-1 text-yellow-500"
                     animate={{ rotate: 360 }}
