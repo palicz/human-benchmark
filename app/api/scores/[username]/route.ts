@@ -9,6 +9,8 @@ interface GameRanks {
     aimRank?: number;
     typeRank?: number;
     memoryRank?: number;
+    stroopRank?: number;
+    visualRank?: number;
 }
 
 async function calculateUserRanks(userName: string): Promise<GameRanks> {
@@ -17,6 +19,8 @@ async function calculateUserRanks(userName: string): Promise<GameRanks> {
             playerName: true,
             aimScore: true,
             typeScore: true,
+            stroopScore: true,
+            visualScore: true,
             score: true,
         },
     });
@@ -44,8 +48,21 @@ async function calculateUserRanks(userName: string): Promise<GameRanks> {
             .sort((a, b) => (b.score || 0) - (a.score || 0));
         const memoryRank = memoryScores.findIndex(s => s.playerName === userName) + 1;
         if (memoryRank > 0) ranks.memoryRank = memoryRank;
-    }
 
+        // Calculate stroop rank
+        const stroopScores = allScores
+            .filter(s => s.stroopScore !== null)
+            .sort((a, b) => (b.stroopScore || 0) - (a.stroopScore || 0));
+        const stroopRank = stroopScores.findIndex(s => s.playerName === userName) + 1;
+        if (stroopRank > 0) ranks.stroopRank = stroopRank;
+
+        // Calculate visual rank
+        const visualScores = allScores
+            .filter(s => s.visualScore !== null)
+            .sort((a, b) => (b.visualScore || 0) - (a.visualScore || 0));
+        const visualRank = visualScores.findIndex(s => s.playerName === userName) + 1;
+        if (visualRank > 0) ranks.visualRank = visualRank;
+    }
     return ranks;
 }
 
@@ -70,6 +87,8 @@ export async function GET(
                 aimScore: true,
                 typeScore: true,
                 score: true,
+                stroopScore: true,
+                visualScore: true,
             }
         });
 
@@ -77,6 +96,8 @@ export async function GET(
             aimScore: null,
             typeScore: null,
             score: null,
+            stroopScore: null,
+            visualScore: null,
         };
 
         const ranks = await calculateUserRanks(username);
