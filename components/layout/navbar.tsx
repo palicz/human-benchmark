@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Brain, Menu, X, User, Trophy } from "lucide-react";
+import { Brain, Menu, X, User, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

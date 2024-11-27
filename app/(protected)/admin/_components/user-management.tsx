@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Trophy,  Brain, User, Timer, Shield, Crosshair } from "lucide-react";
+import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Eye,  Brain, User, Timer, Shield, Crosshair } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
@@ -274,7 +274,7 @@ export function UserManagement() {
             {/* Game Statistics Section */}
             <Card className="p-3 sm:p-6">
               <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2">
-                <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+                <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Game Statistics
               </h3>
               <div className="grid grid-cols-1 gap-3 sm:gap-4">
@@ -338,9 +338,9 @@ export function UserManagement() {
                 <Card className="p-4 border border-border">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="p-2 rounded-full bg-purple-500/10">
-                      <Trophy className="h-4 w-4 text-purple-500" />
+                      <Eye className="h-4 w-4 text-purple-500" />
                     </div>
-                    <h4 className="font-medium">Memory Test</h4>
+                    <h4 className="font-medium">Visual Memory Test</h4>
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between">

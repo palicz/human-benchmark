@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Brain, Trophy, Star, TrendingUp } from "lucide-react";
+import { Brain, Eye, Star, TrendingUp } from "lucide-react";
 import { Card } from "./memory-card";
 
 interface MemoryStatsProps {
@@ -28,7 +28,7 @@ export function MemoryStats({ score, highScore, level, rank }: MemoryStatsProps)
     {
       label: "Personal Best",
       value: highScore ?? "N/A",
-      icon: Trophy,
+      icon: Eye,
       color: "text-yellow-500",
       bgColor: "bg-yellow-500/10",
     },

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, Trophy, ArrowRight, Crosshair } from "lucide-react";
+import { Brain, Timer, ArrowRight, Crosshair, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
@@ -39,10 +39,10 @@ const games = [
     delay: 0.3,
   },
   {
-    id: "memory-test",
-    name: "Memory Test",
+    id: "visual-memory-test",
+    name: "Visual Memory Test",
     description: "Challenge your memory with pattern recognition",
-    icon: Trophy,
+    icon: Eye,
     color: "from-purple-500 to-pink-500",
     delay: 0.4,
   },
@@ -128,7 +128,7 @@ export default function Home() {
           <AccordionItem value="item-1">
             <AccordionTrigger>Science Behind The Tests</AccordionTrigger>
             <AccordionContent>
-              The tests, including the Number Memory Test, Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time.
+              The tests, including the Number Memory Test, Visual Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time.
             </AccordionContent>
           </AccordionItem>
         </motion.div>

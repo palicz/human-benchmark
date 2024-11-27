@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, Trophy, Mail, Hash, Shield, Crosshair } from "lucide-react";
+import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Card } from "@/app/(protected)/settings/_components/stats-card";
 import { Badge } from "@/app/(protected)/settings/_components/stats-badge";

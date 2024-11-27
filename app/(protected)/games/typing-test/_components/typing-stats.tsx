@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Timer, Trophy, Star, TrendingUp } from "lucide-react";
+import { Timer, Eye, Star, TrendingUp } from "lucide-react";
 import { Card } from "./typing-card";
 
 interface TypingStatsProps {
@@ -28,7 +28,7 @@ export function TypingStats({ wpm, wordsTyped, highScore, rank }: TypingStatsPro
     {
       label: "Personal Best",
       value: highScore ?? "N/A",
-      icon: Trophy,
+      icon: Eye,
       color: "text-yellow-500",
       bgColor: "bg-yellow-500/10",
     },
