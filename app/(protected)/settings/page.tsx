@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair } from "lucide-react";
+import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair, Palette } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Card } from "@/app/(protected)/settings/_components/stats-card";
 import { Badge } from "@/app/(protected)/settings/_components/stats-badge";
@@ -15,10 +15,12 @@ interface UserScores {
     aimScore: number | null;
     typeScore: number | null;
     score: number | null;
+    stroopScore: number | null;
     ranks: {
         aimRank?: number;
         typeRank?: number;
         memoryRank?: number;
+        stroopRank? : number;
     };
 }
 
@@ -68,6 +70,13 @@ export default function ProfilePage() {
         rank: userScores?.ranks.typeRank ? `#${userScores.ranks.typeRank}` : "N/A",
         color: "text-green-500",
     },
+    {
+      name: "Stroop Time Test",
+      icon: Palette,
+      score: userScores?.stroopScore ? `${userScores?.stroopScore} points` : "No score yet",
+      rank: userScores?.ranks.stroopRank ? `#${userScores.ranks.stroopRank}` : "N/A",
+      color: "text-red-500",
+    }
 ];
 
   return (

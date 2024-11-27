@@ -24,6 +24,7 @@ async function getFormattedScores() {
       playerName: true,
       aimScore: true,
       typeScore: true,
+      stroopScore: true,
       score: true,
       createdAt: true,
     },
@@ -65,6 +66,16 @@ async function getFormattedScores() {
       date: score.createdAt.toISOString(),
     }));
 
+    const stroopScores = allScores
+    .filter(s => s.score !== null)
+    .sort((a, b) => (b.score || 0) - (a.stroopScore || 0))
+    .map((score, index) => ({
+      rank: index + 1,
+      username: score.playerName,
+      score: `${score.stroopScore} points`,
+      date: score.createdAt.toISOString(),
+    }));
+
   return [
     {
       id: "aim-trainer",
@@ -80,6 +91,11 @@ async function getFormattedScores() {
       id: "typing-test",
       name: "Typing Test",
       scores: typingScores,
+    },
+    {
+      id: "stroop-test",
+      name: "Stroop Test",
+      scores: stroopScores,
     }
   ];
 }
@@ -127,6 +143,8 @@ export async function DELETE(req: Request) {
       case "number-memory":
         updateData.score = null;
         break;
+      case "stroop-test":
+        updateData.stroopScore = null;
       default:
         return new NextResponse("Invalid game type", { status: 400 });
     }

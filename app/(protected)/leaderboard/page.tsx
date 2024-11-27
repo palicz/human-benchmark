@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair } from "lucide-react";
+import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Input } from "@/app/(protected)/leaderboard/_components/leaderboard-input";
 import { Card } from "@/app/(protected)/leaderboard/_components/leaderboard-card";
@@ -45,6 +45,15 @@ const games = [
     gradient: "from-green-500 to-emerald-500",
     scoreKey: "typeScore",
     scoreFormat: (score: number) => `${score} WPM`,
+  },
+  {
+    id: "stroop-test",
+    name: "Stroop Test",
+    icon: Palette,
+    color: "text-red-500",
+    gradient: "from-red-500 to-orange-500",
+    scoreKey: "stroopScore",
+    scoreFormat: (score: number) => `${score} points`,
   },
 ];
 

@@ -52,7 +52,9 @@ export default function Footer() {
               { name: "Aim Trainer", path: "/games/aim-trainer" },
               { name: "Number Memory Test", path: "/games/number-memory" },
               { name: "Typing Test", path: "/games/typing-test" },
-              { name: "Visual Memory Test", path: "/games/visual-memory" }
+              { name: "Visual Memory Test", path: "/games/visual-memory" },
+              { name: "Stroop Test", path: "/games/stroop-test" }
+
             ].map((game) => (
               <li key={game.name} className="transition-transform hover:translate-x-1">
                 <CustomRedirect href={game.path} className="text-muted-foreground hover:text-purple-600 transition-colors">

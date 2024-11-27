@@ -154,15 +154,18 @@ export default function AimTrainerGame() {
             }
 
             if (score > (highScore ?? 0)) {
+                const previousHighScore = highScore ?? 0;
                 setHighScore(score);
                 triggerConfetti();
-                setImprovementMessage(`+${score - (highScore ?? 0)} points improvement!`);
+                setImprovementMessage(`+${score - previousHighScore} points improvement!`);
             }
+            
             const rankResponse = await fetch('/api/user-scores');
             if (rankResponse.ok) {
                 const data = await rankResponse.json();
                 setRank(data.ranks.aimRank);
             }
+            
         } catch (error) {
             console.error('Error saving score:', error);
         }

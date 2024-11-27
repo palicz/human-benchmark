@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Eye,  Brain, User, Timer, Shield, Crosshair } from "lucide-react";
+import { Search, UserCog, Mail, Ban, CheckCircle, MoreVertical, Eye,  Brain, User, Timer, Shield, Crosshair, Palette } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
@@ -44,10 +44,12 @@ export function UserManagement() {
     aimScore: number | null;
     typeScore: number | null;
     score: number | null;
+    stroopScore: number | null;
     ranks: {
       aimRank?: number;
       typeRank?: number;
       memoryRank?: number;
+      stroopRank?: number;
     };
   } | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -412,6 +414,26 @@ export function UserManagement() {
                     </div>
                   </div>
                 </Card>
+
+                <Card className="p-4 border border-border">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-full bg-red-500/10">
+                      <Palette className="h-4 w-4 text-red-500" />
+                    </div>
+                    <h4 className="font-medium">Stroop Memory</h4>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Score</span>
+                      <span className="font-medium">{userStats?.stroopScore ?? "No score"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm text-muted-foreground">Rank</span>
+                      <Badge variant="secondary">#{userStats?.ranks.stroopRank ?? "N/A"}</Badge>
+                    </div>
+                  </div>
+                </Card>
+
               </div>
             </Card>
           </div>

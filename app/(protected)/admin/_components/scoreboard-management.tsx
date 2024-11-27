@@ -8,7 +8,8 @@ import {
   Timer,
   ArrowUpDown,
   MoreVertical,
-  Search
+  Search,
+  Palette
 } from "lucide-react";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
 import { Button } from "@/components/ui/button";
@@ -38,6 +39,7 @@ const gameIcons = {
   "aim-trainer": { icon: Crosshair, color: "text-yellow-500" },
   "number-memory": { icon: Brain, color: "text-blue-500" },
   "typing-test": { icon: Timer, color: "text-green-500" },
+  "stroop-test": { icon: Palette, color: "text-red-500"}
 };
 
 export function ScoreboardManagement() {
@@ -248,6 +250,7 @@ export function ScoreboardManagement() {
                         ${score.rank === 1 && "bg-yellow-500 hover:bg-yellow-600"}
                         ${score.rank === 2 && "bg-gray-400 hover:bg-gray-500"}
                         ${score.rank === 3 && "bg-amber-700 hover:bg-amber-800"}
+                        ${score.rank === 4 && "bg-red-600 hover:bg-red-700"}
                       `}
                     >
                       #{score.rank}

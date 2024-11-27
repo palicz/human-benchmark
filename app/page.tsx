@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, ArrowRight, Crosshair, Eye } from "lucide-react";
+import { Brain, Timer, ArrowRight, Crosshair, Eye, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
@@ -46,6 +46,13 @@ const games = [
     description: "Challenge your memory with pattern recognition",
     icon: Eye,
     color: "from-purple-500 to-pink-500",
+    delay: 0.4,
+  },{
+    id: "stroop-test",
+    name: "Stroop Test",
+    description: "Test your focus with color-word interference",
+    icon: Palette,
+    color: "from-red-500 to-orange-500",
     delay: 0.4,
   },
 ];
@@ -166,7 +173,7 @@ export default function Home() {
 
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <motion.div
             animate={{
               boxShadow: highlightGames
@@ -185,7 +192,7 @@ export default function Home() {
               Choose Your Challenge
             </motion.h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {games.map((game) => (
                 <motion.div
                   key={game.id}
