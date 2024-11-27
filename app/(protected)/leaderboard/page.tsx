@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Zap, Timer, Trophy, Search, Medal, Crown, Star } from "lucide-react";
+import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Input } from "@/app/(protected)/leaderboard/_components/leaderboard-input";
 import { Card } from "@/app/(protected)/leaderboard/_components/leaderboard-card";
@@ -22,7 +22,7 @@ const games = [
   {
     id: "aim-trainer",
     name: "Aim Trainer",
-    icon: Zap,
+    icon: Crosshair,
     color: "text-yellow-500",
     gradient: "from-yellow-500 to-orange-500",
     scoreKey: "aimScore",
@@ -58,7 +58,7 @@ const generateFloatingIcons = () => {
   ];
 
   return positions.map((pos, i) => ({
-    icon: [Brain, Zap, Timer, Trophy][i % 4],
+    icon: [Brain, Crosshair, Timer, Eye][i % 4],
     initialX: pos.x,
     initialY: pos.y,
     duration: 15 + (i * 1.5),

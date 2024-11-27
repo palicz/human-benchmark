@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Crosshair, Trophy, Star, Clock } from 'lucide-react';
+import { Crosshair, Eye, Star, Clock } from 'lucide-react';
 import { Card } from "@/app/(protected)/games/aim-trainer/_components/aim-card";
 
 interface AimStatsProps {
@@ -28,7 +28,7 @@ export function AimStats({ score, highScore, timeLeft, rank }: AimStatsProps) {
     {
       label: "Personal Best",
       value: highScore ?? "N/A",
-      icon: Trophy,
+      icon: Eye,
       color: "text-orange-500",
       bgColor: "bg-orange-500/10",
     },

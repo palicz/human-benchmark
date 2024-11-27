@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   Brain, 
-  Zap, 
+  Crosshair, 
   Timer,
   ArrowUpDown,
   MoreVertical,
@@ -35,7 +35,7 @@ import { Badge } from "@/components/ui/badge";
 type GameId = keyof typeof gameIcons;
 
 const gameIcons = {
-  "aim-trainer": { icon: Zap, color: "text-yellow-500" },
+  "aim-trainer": { icon: Crosshair, color: "text-yellow-500" },
   "number-memory": { icon: Brain, color: "text-blue-500" },
   "typing-test": { icon: Timer, color: "text-green-500" },
 };

@@ -1,11 +1,17 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Zap, Timer, Trophy, ArrowRight, Crosshair } from "lucide-react";
+import { Brain, Timer, ArrowRight, Crosshair, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const games = [
   {
@@ -33,14 +39,35 @@ const games = [
     delay: 0.3,
   },
   {
-    id: "memory-test",
-    name: "Memory Test",
+    id: "visual-memory-test",
+    name: "Visual Memory Test",
     description: "Challenge your memory with pattern recognition",
-    icon: Trophy,
+    icon: Eye,
     color: "from-purple-500 to-pink-500",
     delay: 0.4,
   },
 ];
+
+
+const generateFloatingIcons = () => {
+  const positions = [
+    { x: 15, y: 25 }, { x: 35, y: 45 }, { x: 55, y: 15 }, 
+    { x: 75, y: 65 }, { x: 25, y: 85 }, { x: 45, y: 35 },
+    { x: 65, y: 75 }, { x: 85, y: 25 }, { x: 20, y: 55 },
+    { x: 40, y: 15 }, { x: 60, y: 85 }, { x: 80, y: 45 },
+    { x: 30, y: 65 }, { x: 50, y: 35 }, { x: 70, y: 95 }
+  ];
+
+  return positions.map((pos, i) => ({
+    icon: [Brain, Crosshair, Timer, Eye][i % 4],
+    initialX: pos.x,
+    initialY: pos.y,
+    duration: 15 + (i * 1.5),
+    delay: -1 * (i * 1.3),
+  }));
+};
+
+const floatingIcons = generateFloatingIcons();
 
 export default function Home() {
   const [highlightGames, setHighlightGames] = useState(false);
@@ -55,6 +82,27 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      {/* Floating Background Icons */}
+      {floatingIcons.map((item, index) => (
+        <motion.div
+          key={index}
+          className="absolute opacity-5 pointer-events-none"
+          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
+          animate={{
+            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
+            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+            delay: item.delay,
+          }}
+        >
+          <item.icon className="w-12 h-12" />
+        </motion.div>
+      ))}
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
@@ -113,10 +161,81 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+      <Accordion type="single" collapsible className="w-full">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <AccordionItem value="item-1">
+            <AccordionTrigger>Science Behind The Tests</AccordionTrigger>
+            <AccordionContent>
+              The tests, including the Number Memory Test, Visual Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time.
+            </AccordionContent>
+          </AccordionItem>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1 }}
+        >
+          <AccordionItem value="item-2">
+            <AccordionTrigger>Cognitive Benefits of Training</AccordionTrigger>
+            <AccordionContent>
+              Engaging in cognitive training exercises, such as those offered in our tests, can lead to significant improvements in memory, attention, and processing speed. Regular practice not only enhances these skills but also promotes overall brain health and resilience against cognitive decline.
+            </AccordionContent>
+          </AccordionItem>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.2 }}
+        >
+          <AccordionItem value="item-3">
+            <AccordionTrigger>User Progress Tracking</AccordionTrigger>
+            <AccordionContent>
+              Our platform provides users with detailed progress tracking, allowing them to monitor their performance over time across various tests. This feature enables users to identify strengths and areas for improvement, fostering a personalized training experience that adapts to their evolving needs.
+            </AccordionContent>
+          </AccordionItem>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.4 }}
+        >
+          <AccordionItem value="item-4">
+            <AccordionTrigger>Tips for Improving Performance</AccordionTrigger>
+            <AccordionContent>
+              To maximize your performance in our tests, consider incorporating regular practice sessions, maintaining a healthy lifestyle, and utilizing memory techniques such as visualization and chunking. Additionally, staying focused and minimizing distractions during training can significantly enhance your results and overall cognitive function.
+            </AccordionContent>
+          </AccordionItem>
+        </motion.div>
+      </Accordion>
 
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
+          {/* Floating Background Icons */}
+      {floatingIcons.map((item, index) => (
+        <motion.div
+          key={index}
+          className="absolute opacity-5 pointer-events-none"
+          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
+          animate={{
+            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
+            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+            delay: item.delay,
+          }}
+        >
+          <item.icon className="w-12 h-12" />
+        </motion.div>
+      ))}
           <motion.div
             animate={{
               boxShadow: highlightGames

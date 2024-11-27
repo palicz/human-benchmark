@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Timer } from 'lucide-react';
+import { ArrowRight, Timer, Brain, Crosshair, Eye } from 'lucide-react';
 import { Button } from "@/app/(protected)/games/typing-test/_components/typing-button";
 import { Card } from "@/app/(protected)/games/typing-test/_components/typing-card";
 import { Input } from "@/app/(protected)/games/typing-test/_components/typing-input";
@@ -119,6 +119,26 @@ export default function TypingSpeedTestGame() {
         }
     };
 
+    const generateFloatingIcons = () => {
+        const positions = [
+          { x: 15, y: 25 }, { x: 35, y: 45 }, { x: 55, y: 15 }, 
+          { x: 75, y: 65 }, { x: 25, y: 85 }, { x: 45, y: 35 },
+          { x: 65, y: 75 }, { x: 85, y: 25 }, { x: 20, y: 55 },
+          { x: 40, y: 15 }, { x: 60, y: 85 }, { x: 80, y: 45 },
+          { x: 30, y: 65 }, { x: 50, y: 35 }, { x: 70, y: 95 }
+        ];
+      
+        return positions.map((pos, i) => ({
+          icon: [Brain, Crosshair, Timer, Eye][i % 4],
+          initialX: pos.x,
+          initialY: pos.y,
+          duration: 15 + (i * 1.5),
+          delay: -1 * (i * 1.3),
+        }));
+      };
+      
+      const floatingIcons = generateFloatingIcons();
+
     useEffect(() => {
         fetchHighScore();
     }, [session, wpm]);
@@ -128,6 +148,27 @@ export default function TypingSpeedTestGame() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
             <Navbar />
+            {/* Floating Background Icons */}
+      {floatingIcons.map((item, index) => (
+        <motion.div
+          key={index}
+          className="absolute opacity-5 pointer-events-none"
+          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
+          animate={{
+            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
+            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
+          }}
+          transition={{
+            duration: item.duration,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "linear",
+            delay: item.delay,
+          }}
+        >
+          <item.icon className="w-12 h-12" />
+        </motion.div>
+      ))}
             <div className="container max-w-4xl mx-auto pt-24 px-6 pb-16 relative">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -187,8 +228,8 @@ export default function TypingSpeedTestGame() {
                                     exit={{ opacity: 0 }}
                                     className="text-center space-y-6"
                                 >
-                                    <div className="relative h-auto bg-grey-500/30 overflow-hidden text-2xl font-semibold flex justify-center items-center">
-                                        <span className="text-4xl">
+                                    <div className="relative h-auto bg-grey-500/30 overflow-hidden text-2xl font-semibold flex justify-center items-center ">
+                                        <span className="text-4xl select-none">
                                             {Array.from(remainingWords[currentWordIndex]).map((letter, index) => {
                                                 const inputLetter = inputValue[index];
                                                 const isCorrect = inputLetter === letter;
