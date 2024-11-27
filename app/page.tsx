@@ -216,27 +216,6 @@ export default function Home() {
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Floating Background Icons */}
-      {floatingIcons.map((item, index) => (
-        <motion.div
-          key={index}
-          className="absolute opacity-5 pointer-events-none"
-          initial={{ x: `${item.initialX}vw`, y: `${item.initialY}vh` }}
-          animate={{
-            x: [`${item.initialX}vw`, `${(item.initialX + 30) % 100}vw`],
-            y: [`${item.initialY}vh`, `${(item.initialY + 40) % 100}vh`],
-          }}
-          transition={{
-            duration: item.duration,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear",
-            delay: item.delay,
-          }}
-        >
-          <item.icon className="w-12 h-12" />
-        </motion.div>
-      ))}
           <motion.div
             animate={{
               boxShadow: highlightGames
