@@ -18,6 +18,8 @@ model Scoreboard {
   score      Int?
   aimScore   Int?
   typeScore  Int?
+  visualScore Int?
+  stroopScore Int?
   createdAt  DateTime @default(now())
 
     @@map("scoreboard")
