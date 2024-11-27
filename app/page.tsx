@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import Footer from "@/components/layout/footer";
 
 const games = [
   {
@@ -162,56 +163,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-      <Accordion type="single" collapsible className="w-full">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <AccordionItem value="item-1">
-            <AccordionTrigger>Science Behind The Tests</AccordionTrigger>
-            <AccordionContent>
-              The tests, including the Number Memory Test, Visual Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time.
-            </AccordionContent>
-          </AccordionItem>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <AccordionItem value="item-2">
-            <AccordionTrigger>Cognitive Benefits of Training</AccordionTrigger>
-            <AccordionContent>
-              Engaging in cognitive training exercises, such as those offered in our tests, can lead to significant improvements in memory, attention, and processing speed. Regular practice not only enhances these skills but also promotes overall brain health and resilience against cognitive decline.
-            </AccordionContent>
-          </AccordionItem>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.2 }}
-        >
-          <AccordionItem value="item-3">
-            <AccordionTrigger>User Progress Tracking</AccordionTrigger>
-            <AccordionContent>
-              Our platform provides users with detailed progress tracking, allowing them to monitor their performance over time across various tests. This feature enables users to identify strengths and areas for improvement, fostering a personalized training experience that adapts to their evolving needs.
-            </AccordionContent>
-          </AccordionItem>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 1.4 }}
-        >
-          <AccordionItem value="item-4">
-            <AccordionTrigger>Tips for Improving Performance</AccordionTrigger>
-            <AccordionContent>
-              To maximize your performance in our tests, consider incorporating regular practice sessions, maintaining a healthy lifestyle, and utilizing memory techniques such as visualization and chunking. Additionally, staying focused and minimizing distractions during training can significantly enhance your results and overall cognitive function.
-            </AccordionContent>
-          </AccordionItem>
-        </motion.div>
-      </Accordion>
 
       {/* Games Section */}
       <section id="games" className="py-16 px-6">
@@ -287,10 +238,55 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      {/* Info section */}
+      <section className="py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <Accordion type="single" collapsible className="w-full">
+            {[
+              {
+                value: "item-1",
+                title: "Science Behind The Tests",
+                content: "The tests, including the Number Memory Test, Visual Memory Test, Aim Training Test, and Typing Test, are designed to assess and enhance cognitive functions such as memory retention, hand-eye coordination, and typing speed. Each test utilizes specific tasks to challenge and improve the user's mental agility, focus, and accuracy, providing valuable insights into their cognitive abilities and progress over time."
+              },
+              {
+                value: "item-2",
+                title: "Cognitive Benefits of Training",
+                content: "Engaging in cognitive training exercises, such as those offered in our tests, can lead to significant improvements in memory, attention, and processing speed. Regular practice not only enhances these skills but also promotes overall brain health and resilience against cognitive decline."
+              },
+              {
+                value: "item-3",
+                title: "User Progress Tracking",
+                content: "Our platform provides users with detailed progress tracking, allowing them to monitor their performance over time across various tests. This feature enables users to identify strengths and areas for improvement, fostering a personalized training experience that adapts to their evolving needs."
+              },
+              {
+                value: "item-4",
+                title: "Tips for Improving Performance",
+                content: "To maximize your performance in our tests, consider incorporating regular practice sessions, maintaining a healthy lifestyle, and utilizing memory techniques such as visualization and chunking. Additionally, staying focused and minimizing distractions during training can significantly enhance your results and overall cognitive function."
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={item.value}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <AccordionItem value={item.value}>
+                  <AccordionTrigger>{item.title}</AccordionTrigger>
+                  <AccordionContent>{item.content}</AccordionContent>
+                </AccordionItem>
+              </motion.div>
+            ))}
+          </Accordion>
+        </div>
+      </section>
 
-      {/* Belt Section */}
-      <section>
-
+      {/* Footer Section */}
+      <section className="py-16 bg-secondary/20">
+        <div className="max-w-7xl mx-auto px-6">
+          <Footer />
+        </div>
       </section>
     </div>
   );

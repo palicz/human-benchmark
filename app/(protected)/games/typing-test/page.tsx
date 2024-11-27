@@ -243,13 +243,15 @@ export default function TypingSpeedTestGame() {
                                             })}
                                         </span>
                                     </div>
+                                    <div className="flex flex-col items-center w-full gap-4">
                                     <Input
                                         value={inputValue}
                                         onChange={handleInputChange}
                                         className="mt-4 text-center text-2xl font-bold opacity-30"
                                         autoFocus
                                     />
-                                    <Progress value={progressValue} />
+                                    <Progress value={progressValue} className="max-w-xl w-full"/>
+                                    </div>
                                 </motion.div>
                             )}
 
