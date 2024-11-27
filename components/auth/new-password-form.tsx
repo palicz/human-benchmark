@@ -54,8 +54,8 @@ export const NewPasswordForm = () => {
 
     return (
         <CardWrapper
-        headerLabel="Jelszó megváltoztatása"
-        backButtonLabel="Vissza a bejelentkezéshez"
+        headerLabel="Reset password"
+        backButtonLabel="Back to login"
         backButtonHref="/auth/login"
         >
             <Form {...form}>
@@ -67,7 +67,7 @@ export const NewPasswordForm = () => {
                         <FormField control={form.control} name="password" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Jelszó 
+                                    Password 
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} disabled={isPending} placeholder="******" type="password"/>
@@ -79,7 +79,7 @@ export const NewPasswordForm = () => {
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
                     <Button disabled={isPending} typeof="submit" className="w-full">
-                        Jelszó beállítása
+                        Set password
                     </Button>
                 </form>
             </Form>

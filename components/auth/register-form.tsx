@@ -52,8 +52,8 @@ export const RegisterForm = () => {
 
     return (
         <CardWrapper
-        headerLabel="Regisztráció"
-        backButtonLabel="Már van fiókod?"
+        headerLabel="Register to access our content"
+        backButtonLabel="Already have an account?"
         backButtonHref="/auth/login"
         showSocial>
             <Form {...form}>
@@ -65,7 +65,7 @@ export const RegisterForm = () => {
                     <FormField control={form.control} name="name" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Felhasználónév
+                                    Username
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} disabled={isPending} placeholder="John Doe" type="text"/>
@@ -87,7 +87,7 @@ export const RegisterForm = () => {
                         <FormField control={form.control} name="password" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Jelszó
+                                    Password
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} disabled={isPending} placeholder="******" type="password"/>
@@ -99,7 +99,7 @@ export const RegisterForm = () => {
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
                     <Button disabled={isPending} typeof="submit" className="w-full">
-                        Fiók létrehozása
+                        Create account
                     </Button>
                 </form>
             </Form>

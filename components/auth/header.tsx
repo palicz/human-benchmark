@@ -16,8 +16,11 @@ export const Header = ({
 }: HeaderProps) => {
     return (
     <div className="w-full flex flex-col gap-y-4 items-center justify-center">
-        <h1 className={cn("text-3xl font-semibold", font.className)}>
-            Human Benchmark
+        <h1 className={cn(
+            "text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600",
+            font.className
+        )}>
+            BrainGames
         </h1>
         <p className="text-muted-foreground text-sm">
             {label}

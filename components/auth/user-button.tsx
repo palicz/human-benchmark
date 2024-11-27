@@ -41,7 +41,7 @@ export const UserButton = () => {
                 <ProfileButton>
                     <DropdownMenuItem>
                         <User className="h-4" />
-                        Profil
+                        Profile
                     </DropdownMenuItem>
                 </ProfileButton>
                 <AdminButton>
@@ -53,7 +53,7 @@ export const UserButton = () => {
                 <LogoutButton>
                     <DropdownMenuItem>
                         <LogOut className="h-4"/>
-                        Kijelentkezés
+                        Logout
                     </DropdownMenuItem>
                 </LogoutButton>
             </DropdownMenuContent>

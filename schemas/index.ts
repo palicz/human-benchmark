@@ -6,33 +6,33 @@ export const SettingsSchema = z.object({
 
 export const NewPasswordSchema = z.object({
     password: z.string().min(6, {
-        message: "A jelszónak legalább 6 karakterből kell állnia!"
+        message: "Password must be at least 6 characters long!"
     }),
 });
 
 export const ResetSchema = z.object({
     email: z.string().email({
-        message: "Hibás email cím!"
+        message: "Invalid email address!"
     }),
 });
 
 export const LoginSchema = z.object({
     email: z.string().email({
-        message: "Hibás email cím!"
+        message: "Invalid email address!"
     }),
     password: z.string().min(1, {
-        message: "Hibás jelszó!"
+        message: "Invalid password!"
     })
 });
 
 export const RegisterSchema = z.object({
     email: z.string().email({
-        message: "Hibás email cím!"
+        message: "Invalid email address!"
     }),
     password: z.string().min(6, {
-        message: "A jelszónak legalább 6 karakterből kell állnia!"
+        message: "Password must be at least 6 characters long!"
     }),
     name: z.string().min(1, {
-        message: "Hibás felhasználónév!"
+        message: "Invalid username!"
     })
 });

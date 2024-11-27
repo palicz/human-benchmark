@@ -11,7 +11,7 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     const validatedFields = ResetSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: "Hibás email cím!" };
+        return { error: "Invalid email address!" };
     }
 
     const { email } = validatedFields.data;
@@ -19,7 +19,7 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-        return { error: "Email cím nem található! "}
+        return { error: "Email address not found!" }
     }
 
     const passwordResetToken = await generatePasswordResetToken(email);
@@ -28,5 +28,5 @@ export const reset = async (values: z.infer<typeof ResetSchema>) => {
         passwordResetToken.token,
     );
 
-    return { success: "Helyreállító email sikeresen elküldve!"}
+    return { success: "Password reset email sent successfully!" }
 }

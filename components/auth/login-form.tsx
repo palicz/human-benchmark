@@ -24,13 +24,14 @@ import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import Link from "next/link";
+import { Link as CustomRedirect } from "@/components/ui/link";
 
 export const LoginForm = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-        ? "Ez az email cím már használatban van másik szolgáltatóval."
+        ? "This email is already in use with another provider."
         : "";
 
     const [error, setError] = useState<string | undefined>("");
@@ -56,12 +57,12 @@ export const LoginForm = () => {
             });
 
             if (result?.error) {
-                setError("Érvénytelen bejelentkezési adatok!");
+                setError("Invalid login credentials!");
             } else {
                 router.push(DEFAULT_LOGIN_REDIRECT);
             }
         } catch (error) {
-            setError("Hoppá! Valami hiba történt!");
+            setError("Ops! Something went wrong!");
         } finally {
             setIsPending(false);
         }
@@ -69,8 +70,8 @@ export const LoginForm = () => {
 
     return (
         <CardWrapper
-        headerLabel="Bejelentkezés"
-        backButtonLabel="Még nincs fiókod?"
+        headerLabel="Login to access our content"
+        backButtonLabel="You don't have an account?"
         backButtonHref="/auth/register"
         showSocial>
             <Form {...form}>
@@ -93,15 +94,15 @@ export const LoginForm = () => {
                         <FormField control={form.control} name="password" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Jelszó
+                                    Password
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} disabled={isPending} placeholder="******" type="password"/>
                                 </FormControl>
                                 <Button size="sm" variant="link" asChild className="px-0 font-normal">
-                                        <Link href="/auth/reset">
-                                            Elfelejtetted a jelszavadat?
-                                        </Link>
+                                        <CustomRedirect href="/auth/reset">
+                                            Forgot password?
+                                        </CustomRedirect>
                                     </Button>
                                 <FormMessage />
                             </FormItem>
@@ -110,7 +111,7 @@ export const LoginForm = () => {
                     <FormError message={error || urlError}/>
                     <FormSuccess message={success}/>
                     <Button disabled={isPending} typeof="submit" className="w-full">
-                        Bejelentkezés
+                        Login
                     </Button>
                 </form>
             </Form>

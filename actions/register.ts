@@ -14,7 +14,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const validatedFields = RegisterSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: "Érvénytelen regisztrációs adatok!"};
+        return { error: "Invalid registration data!"};
     }
 
     const { email, password, name } = validatedFields.data;
@@ -23,7 +23,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const existingUser = await getUserByEmail(email)
 
     if (existingUser) {
-        return { error: "Ez az email cím már használatban van!"}
+        return { error: "This email address is already in use!"}
     }
 
     await db.user.create({
@@ -41,5 +41,5 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         verificationToken.token
     )
 
-    return { success: "Megerősítő email elküldve!"};
+    return { success: "Verification email sent successfully!"};
 };

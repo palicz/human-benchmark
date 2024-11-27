@@ -50,8 +50,8 @@ export const ResetForm = () => {
 
     return (
         <CardWrapper
-        headerLabel="Elfelejtetted a jelszavadat?"
-        backButtonLabel="Vissza a bejelentkezéshez"
+        headerLabel="Forgot your password?"
+        backButtonLabel="Back to login"
         backButtonHref="/auth/login"
         >
             <Form {...form}>
@@ -63,7 +63,7 @@ export const ResetForm = () => {
                         <FormField control={form.control} name="email" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Email cím 
+                                    Email
                                 </FormLabel>
                                 <FormControl>
                                     <Input {...field} disabled={isPending} placeholder="john.doe@email.com" type="email"/>
@@ -75,7 +75,7 @@ export const ResetForm = () => {
                     <FormError message={error}/>
                     <FormSuccess message={success}/>
                     <Button disabled={isPending} typeof="submit" className="w-full">
-                        Jelszó helyreállítása
+                        Reset password
                     </Button>
                 </form>
             </Form>

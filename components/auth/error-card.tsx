@@ -5,9 +5,9 @@ import { TriangleAlert } from "lucide-react";
 export const ErrorCard = () => {
     return (
         <CardWrapper
-        headerLabel="Hoppá! Sajnos hiba történt!"
+        headerLabel="Ops! Something went wrong!"
         backButtonHref="/auth/login"
-        backButtonLabel="Vissza a bejelentkezéshez"
+        backButtonLabel="Back to login"
         >
             <div className="w-full flex justify-center items-center">
                 <TriangleAlert className="text-destructive"/>

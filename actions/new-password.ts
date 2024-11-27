@@ -13,13 +13,13 @@ export const newPassword = async (
     token?: string | null,
 ) => {
     if (!token) {
-        return { error: "Hibás token!" }
+        return { error: "Invalid token!" }
     }
 
     const validatedFields = NewPasswordSchema.safeParse(values);
 
     if (!validatedFields.success) {
-        return { error: "Hibás adatok!" };
+        return { error: "Invalid data!" };
     }
 
     const { password } = validatedFields.data;
@@ -27,19 +27,19 @@ export const newPassword = async (
     const existingToken = await getPasswordResetTokenByToken(token);
 
     if (!existingToken) {
-        return { error: "Hibás token!" }
+        return { error: "Invalid token!" }
     }
 
     const hasExpired = new Date(existingToken.expires) < new Date();
 
     if (hasExpired) {
-        return { error: "A token lejárt!" };
+        return { error: "Token expired!" };
     }
 
     const existingUser = await getUserByEmail(existingToken.email);
 
     if (!existingUser) {
-        return { error: "Ez az email cím nem létezik!"}
+        return { error: "This email address does not exist!"}
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -52,5 +52,5 @@ export const newPassword = async (
         where: { id: existingToken.id }
     });
 
-    return { success: "Jelszó sikeresen megváltoztatva!" }
+    return { success: "Password changed successfully!" }
 };

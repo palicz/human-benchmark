@@ -21,7 +21,7 @@ export const NewVerificationForm = () => {
         if (success || error) return;
 
         if (!token) {
-            setError("Hibás token!")
+            setError("Invalid token!")
             return;
         };
 
@@ -31,7 +31,7 @@ export const NewVerificationForm = () => {
                 setError(data.error)
             })
             .catch(() => {
-                setError("Hoppá! Sajnos hiba történt!")
+                setError("Ops! Something went wrong!")
             })
     }, [token, success, error]);
 
@@ -41,8 +41,8 @@ export const NewVerificationForm = () => {
 
     return (
         <CardWrapper
-        headerLabel="Megerősítés visszaigazolása"
-        backButtonLabel="Vissza a bejelentkezéshez"
+        headerLabel="Verify your email"
+        backButtonLabel="Back to login"
         backButtonHref="/auth/login"
         >
             <div className="flex items-center w-full justify-center">

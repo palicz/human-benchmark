@@ -7,8 +7,8 @@ export const admin = async () => {
     const role = await currentRole();
 
     if (role === UserRole.ADMIN) {
-        return { success: "Hozzáférés elfogadva." }
+        return { success: "Access granted." }
     }
 
-    return { error: "Hozzáférés megtagadva!" }
+    return { error: "Access denied." }
 }
