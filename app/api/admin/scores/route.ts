@@ -66,13 +66,14 @@ async function getFormattedScores() {
       date: score.createdAt.toISOString(),
     }));
 
-    const stroopScores = allScores
-    .filter(s => s.score !== null)
-    .sort((a, b) => (b.score || 0) - (a.stroopScore || 0))
+  // Format stroop test scores
+  const stroopScores = allScores
+    .filter(s => s.stroopScore !== null)
+    .sort((a, b) => (b.stroopScore || 0) - (a.stroopScore || 0))
     .map((score, index) => ({
       rank: index + 1,
       username: score.playerName,
-      score: `${score.stroopScore} points`,
+      score: `${score.stroopScore} points`, 
       date: score.createdAt.toISOString(),
     }));
 
