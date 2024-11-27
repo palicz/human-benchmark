@@ -21,6 +21,7 @@ const games = [
     name: "Aim Trainer",
     description: "Test your reflexes with split-second timing challenges",
     icon: Crosshair,
+    style: "text-blue-500",
     color: "from-yellow-500 to-orange-500",
     delay: 0.1,
   },
@@ -204,7 +205,7 @@ export default function Home() {
                   className={`relative overflow-hidden rounded-xl bg-gradient-to-r ${game.color} p-1`}
                 >
                   <div className="bg-background rounded-lg p-6 h-full">
-                    <game.icon className="w-12 h-12 mb-4" />
+                    <game.icon className="w-12 h-12 mb-4"/>
                     <h3 className="text-xl font-semibold mb-2">{game.name}</h3>
                     <p className="text-muted-foreground mb-4">{game.description}</p>
                     <Button className="w-full" variant="secondary" asChild>

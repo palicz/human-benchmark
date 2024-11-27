@@ -384,11 +384,7 @@ export default function NumberMemoryGame() {
                           Final Score: {score}
                         </Badge>
 
-                        <div className="flex flex-col items-center gap-2">
-                          <Badge variant="outline" className="text-xl px-4 py-2">
-                            Previous Best: {highScore}
-                          </Badge>
-
+                        <div className="flex flex-col items-center">
                           {highScore !== null && score > highScore && (
                             <Badge variant="secondary" className="text-xl px-4 py-2 bg-green-500/20 text-green-500">
                               +{score - highScore} points improvement!

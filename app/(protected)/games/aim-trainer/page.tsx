@@ -364,10 +364,6 @@ export default function AimTrainerGame() {
                                                 </Badge>
 
                                                 <div className="flex flex-col items-center gap-2">
-                                                    <Badge variant="outline" className="text-xl px-4 py-2">
-                                                        Previous Best: {highScore}
-                                                    </Badge>
-
                                                     {highScore !== null && score > highScore && (
                                                         <Badge variant="improvement" className="text-xl px-4 py-2 bg-green-500/20 text-green-500">
                                                             {improvementMessage}
@@ -389,10 +385,10 @@ export default function AimTrainerGame() {
 
                                                 {highScore !== null && (
                                                     <div className="flex flex-col items-center gap-2">
-                                                        <Badge variant="outline" className="text-xl px-4 py-2">
+                                                        <Badge variant="outline" className="text-md px-4 py-2">
                                                             Personal Best: {highScore}
                                                         </Badge>
-                                                        <span className="text-sm text-muted-foreground">
+                                                        <span className="text-sm text-muted-foreground py-2">
                                                             Keep practicing! You're just {highScore - score} points away from your best score.
                                                         </span>
                                                     </div>
@@ -407,7 +403,6 @@ export default function AimTrainerGame() {
                                             setGameState("ready");
                                         }}
                                         size="lg"
-                                        className="mt-4"
                                     >
                                         Play Again
                                         <ArrowRight className="ml-2 w-4 h-4" />
