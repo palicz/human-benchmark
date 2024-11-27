@@ -20,7 +20,7 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(user);
+    return new NextResponse("Successful delete", { status: 200 });
   } catch (error) {
     console.error("[USER_DELETE]", error);
     return new NextResponse("Internal Error", { status: 500 });
