@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { toast } from "sonner";
 
 export function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -205,8 +206,61 @@ export function UserManagement() {
                           setIsEditModalOpen(true);
                           fetchUserStats(user.name || "");
                         }}>
+                          <Eye className="h-4 w-4 mr-2" />
                           View
                         </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        {user.role !== "ADMIN" ? (
+                          <DropdownMenuItem 
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(`/api/users/${user.id}/role`, {
+                                  method: 'PATCH',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({ role: 'ADMIN' }),
+                                });
+
+                                if (!response.ok) throw new Error('Failed to promote user');
+
+                                const updatedUser = await response.json();
+                                setUsers(users.map(u => u.id === user.id ? updatedUser : u));
+                                toast.success("User promoted to admin");
+                              } catch (error) {
+                                toast.error("Failed to promote user");
+                              }
+                            }}
+                          >
+                            <Shield className="h-4 w-4 mr-2" />
+                            Promote to Admin
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem 
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(`/api/users/${user.id}/role`, {
+                                  method: 'PATCH',
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                  },
+                                  body: JSON.stringify({ role: 'USER' }),
+                                });
+
+                                if (!response.ok) throw new Error('Failed to demote user');
+
+                                const updatedUser = await response.json();
+                                setUsers(users.map(u => u.id === user.id ? updatedUser : u));
+                                toast.success("User demoted to regular user");
+                              } catch (error) {
+                                toast.error("Failed to demote user");
+                              }
+                            }}
+                          >
+                            <User className="h-4 w-4 mr-2" />
+                            Demote to User
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
                           className="text-red-500"
@@ -215,6 +269,7 @@ export function UserManagement() {
                             setIsDeleteModalOpen(true);
                           }}
                         >
+                          <Ban className="h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
