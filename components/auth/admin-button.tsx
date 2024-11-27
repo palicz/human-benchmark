@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { Link } from "@/components/ui/link";
 import { useCurrentRole } from "@/hooks/use-current-role";
 import { UserRole } from "@prisma/client";
 
@@ -12,19 +12,14 @@ export const AdminButton = ({
     children
 }: AdminButtonProps) => {
     const role = useCurrentRole();
-    const router = useRouter();
 
     if (role !== UserRole.ADMIN) {
         return null;
     }
 
-    const onClick = () => {
-        router.push('/admin');
-    };
-
     return (
-        <span onClick={onClick} className="cursor-pointer">
+        <Link href="/admin">
             {children}
-        </span>
+        </Link>
     )
 }

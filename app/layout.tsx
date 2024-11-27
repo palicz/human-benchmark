@@ -4,6 +4,8 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
 import { Inter } from 'next/font/google';
+import { NavigationEvents } from "@/components/layout/navigation-events";
+import { LoadingAnimation } from "@/components/layout/loading-animation";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,6 +26,8 @@ export default async function RootLayout({
       <body className={inter.className}>
         <SessionProvider session={session}>
           <Toaster />
+          <NavigationEvents />
+          <LoadingAnimation />
           {children}
           </SessionProvider>
       </body>

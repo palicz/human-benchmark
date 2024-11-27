@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { Link } from "@/components/ui/link";
 
 interface ProfileButtonProps {
     children?: React.ReactNode;
@@ -9,15 +9,9 @@ interface ProfileButtonProps {
 export const ProfileButton = ({
     children
 }: ProfileButtonProps) => {
-    const router = useRouter();
-
-    const onClick = () => {
-    router.push('/settings');
-    };
-
     return (
-        <span onClick={onClick} className="cursor-pointer">
+        <Link href="/settings">
             {children}
-        </span>
+        </Link>
     )
 }

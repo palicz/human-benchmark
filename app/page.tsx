@@ -5,6 +5,7 @@ import { Brain, Timer, ArrowRight, Crosshair, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
+import { Link as CustomRedirect } from "@/components/ui/link"
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -113,7 +114,7 @@ export default function Home() {
                 </Button>
               </motion.div>
               <Button size="lg" variant="outline" asChild>
-                <Link href="/leaderboard">View Leaderboard</Link>
+                <CustomRedirect href="/leaderboard">View Leaderboard</CustomRedirect>
               </Button>
             </motion.div>
           </motion.div>
@@ -207,10 +208,10 @@ export default function Home() {
                     <h3 className="text-xl font-semibold mb-2">{game.name}</h3>
                     <p className="text-muted-foreground mb-4">{game.description}</p>
                     <Button className="w-full" variant="secondary" asChild>
-                      <Link href={`/games/${game.id}`}>
+                      <CustomRedirect href={`/games/${game.id}`}>
                         Play Now
                         <ArrowRight className="w-4 h-4 ml-2" />
-                      </Link>
+                      </CustomRedirect>
                     </Button>
                   </div>
                 </motion.div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link as CustomRedirect } from "@/components/ui/link"
+import Link from "next/link"
 import { motion } from "framer-motion";
 import { Brain, Menu, X, User, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -53,13 +54,23 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-muted-foreground hover:text-foreground transition-colors" 
-              >
-                {item.name}
-              </Link>
+              item.name === "Games" ? (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ) : (
+                <CustomRedirect
+                  key={item.name}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {item.name}
+                </CustomRedirect>
+              )
             ))}
             {status === "loading" ? (
               <Button disabled>
@@ -68,12 +79,12 @@ export function Navbar() {
             ) : status === "authenticated" ? (
               <UserButton />
             ) : (
-              <Link href={`/auth/login`}>
+              <CustomRedirect href={`/auth/login`}>
                 <Button>
                   <User className="w-4 h-4 mr-2" />
                   Sign In
                 </Button>
-              </Link>
+              </CustomRedirect>
             )}
           </nav>
 

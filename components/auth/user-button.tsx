@@ -18,6 +18,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { ProfileButton } from "@/components/auth/profile-button";
 import { AdminButton } from "./admin-button";
+import { Link } from "@/components/ui/link";
 
 export const UserButton = () => {
     const user = useCurrentUser();
@@ -25,6 +26,7 @@ export const UserButton = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
+                <Link href="/settings">
                 <Avatar className="shadow-sm">
                     <AvatarImage src={user?.image || undefined} alt={user?.name || "Profil"}/>
                     <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500">
@@ -33,6 +35,7 @@ export const UserButton = () => {
                         </span>
                     </AvatarFallback>
                 </Avatar>
+                </Link>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-40" align="end">
                 <ProfileButton>
