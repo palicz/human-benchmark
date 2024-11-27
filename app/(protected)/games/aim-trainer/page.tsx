@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crosshair, ArrowRight, CircleUser } from 'lucide-react';
+import { Crosshair, ArrowRight, Target } from 'lucide-react';
 import { Button } from "@/app/(protected)/games/aim-trainer/_components/aim-button";
 import { Card } from "@/app/(protected)/games/aim-trainer/_components/aim-card";
 import confetti from 'canvas-confetti';
@@ -10,6 +10,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { useSession } from "next-auth/react";
 import { Badge } from "@/components/ui/badge";
 import { AimStats } from "@/app/(protected)/games/aim-trainer/_components/aim-stats";
+import Explosion from "@/app/(protected)/games/aim-trainer/_components/explosion";
 
 type GameState = "ready" | "playing" | "gameover";
 
@@ -50,12 +51,14 @@ export default function AimTrainerGame() {
     const { data: session } = useSession();
     const [rank, setRank] = useState<number | undefined>();
     const [targetPosition, setTargetPosition] = useState({ x: 0, y: 0 });
-    const [targetSize, setTargetSize] = useState(5);
+    const [targetSize, setTargetSize] = useState(7);
     const [improvementMessage, setImprovementMessage] = useState<string | null>(null);
+    const [explosionVisible, setExplosionVisible] = useState(false);
+    const [explosionPosition, setExplosionPosition] = useState({ x: 0, y: 0 });
 
     const generateTarget = useCallback(() => {
-        const minSize = 30;
-        const maxSize = 60;
+        const minSize = 35;
+        const maxSize = 80;
         const size = Math.floor(Math.random() * (maxSize - minSize + 1)) + minSize;
 
         const maxX = 100 - (size / 4);
@@ -76,8 +79,15 @@ export default function AimTrainerGame() {
     };
 
     const handleTargetClick = () => {
+        const currentPosition = targetPosition;
         setScore((prevScore) => prevScore + 1);
+        setExplosionPosition(currentPosition);
+        setExplosionVisible(true);
         generateTarget();
+    };
+
+    const handleExplosionComplete = () => {
+        setExplosionVisible(false);
     };
 
     const triggerConfetti = () => {
@@ -256,8 +266,18 @@ export default function AimTrainerGame() {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    className="relative h-[600px] bg-black rounded-lg overflow-hidden cursor-crosshair"
+                                    className="relative h-[600px] rounded-lg overflow-hidden cursor-crosshair"
                                 >
+                                    <motion.div
+                                        className="absolute inset-0 animated-background opacity-50"
+                                        style={{
+                                            background: 'linear-gradient(270deg, rgba(5, 26, 145, 0.6), rgba(19, 46, 197, 0.6), rgba(33, 115, 203, 0.6), rgba(39, 185, 217, 0.6), rgba(41, 223, 225, 0.6), rgba(48, 239, 178, 0.6), rgba(37, 247, 126, 0.6))',
+                                            backgroundSize: '400% 400%',
+                                        }}
+                                    />
+                                    {explosionVisible && (
+                                        <Explosion position={explosionPosition} onComplete={handleExplosionComplete} />
+                                    )}
                                     <motion.div
                                         className="absolute text-red-500"
                                         style={{
@@ -271,7 +291,7 @@ export default function AimTrainerGame() {
                                         animate={{ scale: 1 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 10 }}
                                     >
-                                        <CircleUser className="w-full h-full" />
+                                        <Target className="w-full h-full" />
                                     </motion.div>
                                 </motion.div>
                             )}

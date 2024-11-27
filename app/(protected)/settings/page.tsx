@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Zap, Timer, Trophy, Mail, Hash, Shield } from "lucide-react";
+import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Card } from "@/app/(protected)/settings/_components/stats-card";
 import { Badge } from "@/app/(protected)/settings/_components/stats-badge";
@@ -49,7 +49,7 @@ export default function ProfilePage() {
   const gameStats = [
     {
         name: "Aim Trainer",
-        icon: Zap,
+        icon: Crosshair,
         score: userScores?.aimScore ? `${userScores.aimScore} points` : "No score yet",
         rank: userScores?.ranks.aimRank ? `#${userScores.ranks.aimRank}` : "N/A",
         color: "text-yellow-500",
