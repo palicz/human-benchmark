@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Eye, Palette, Star, Clock } from 'lucide-react';
-import { Card } from "@/components/ui/card";
+import { Card } from "@/app/(protected)/games/stroop-test/_components/stroop-card";
 
 interface StroopStatsProps {
   score: number;
