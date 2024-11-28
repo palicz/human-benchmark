@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, ArrowRight, Crosshair, Eye, Palette } from "lucide-react";
+import { Brain, Timer, ArrowRight, Crosshair, Eye, Palette, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/layout/navbar";
 import Link from "next/link";
@@ -48,13 +48,22 @@ const games = [
     icon: Eye,
     color: "from-purple-500 to-pink-500",
     delay: 0.4,
-  },{
+  },
+  {
     id: "stroop-test",
     name: "Stroop Test",
     description: "Test your focus with color-word interference",
     icon: Palette,
     color: "from-red-500 to-orange-500",
-    delay: 0.4,
+    delay: 0.5,
+  },
+  {
+    id: "reaction-time",
+    name: "Reaction Time Test",
+    description: "Measure your response time to visual stimuli",
+    icon: Zap,
+    color: "from-cyan-500 to-blue-500",
+    delay: 0.6,
   },
 ];
 
@@ -193,7 +202,7 @@ export default function Home() {
               Choose Your Challenge
             </motion.h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {games.map((game) => (
                 <motion.div
                   key={game.id}

@@ -9,7 +9,8 @@ import {
   ArrowUpDown,
   MoreVertical,
   Search,
-  Palette
+  Palette,
+  Eye
 } from "lucide-react";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,8 @@ const gameIcons = {
   "aim-trainer": { icon: Crosshair, color: "text-yellow-500" },
   "number-memory": { icon: Brain, color: "text-blue-500" },
   "typing-test": { icon: Timer, color: "text-green-500" },
-  "stroop-test": { icon: Palette, color: "text-red-500"}
+  "stroop-test": { icon: Palette, color: "text-red-500" },
+  "visual-memory": { icon: Eye, color: "text-purple-500" }
 };
 
 export function ScoreboardManagement() {

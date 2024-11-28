@@ -5,23 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Eye, Trophy, Brain, Timer, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/app/(protected)/games/visual-memory-test/_components/visual-card";
-import { useToast } from "@/hooks/use-toast";
 import { Navbar } from "@/components/layout/navbar";
 import { VisualGrid } from "@/app/(protected)/games/visual-memory-test/_components/visual-grid";
 import { VisualStats } from "@/app/(protected)/games/visual-memory-test/_components/game-stats";
 import { GameInstructions } from "@/app/(protected)/games/visual-memory-test/_components/game-instructions";
+import { useSession } from "next-auth/react";
 
 type GameState = "ready" | "showing" | "input" | "gameover" | "success";
 
 export default function VisualMemoryGame() {
+  const { data: session } = useSession();
   const [gameState, setGameState] = useState<GameState>("ready");
   const [sequence, setSequence] = useState<number[]>([]);
   const [userSequence, setUserSequence] = useState<number[]>([]);
   const [level, setLevel] = useState(0);
   const [score, setScore] = useState(0);
-  const { toast } = useToast();
   const [currentShowingIndex, setCurrentShowingIndex] = useState<number | undefined>();
   const [isShowingSequence, setIsShowingSequence] = useState(false);
+  const [highScore, setHighScore] = useState<number | null>(null);
+  const [rank, setRank] = useState<number | null>(null);
 
   const generateSequence = (level: number) => {
     const sequenceLength = level;
@@ -72,21 +74,14 @@ export default function VisualMemoryGame() {
 
     if (sequence[userSequence.length] !== index) {
       setGameState("gameover");
-      toast({
-        variant: "destructive",
-        title: "Game Over!",
-        description: `Final Score: ${score}`,
-      });
+      saveScore();
       return;
     }
 
     if (newUserSequence.length === sequence.length) {
       setGameState("success");
-      toast({
-        title: "Level Complete!",
-        description: `Moving to level ${level + 1}`,
-        className: "bg-green-500",
-      });
+      const newScore = score + (level * 100);
+      setScore(newScore);
       const nextLevel = level + 1;
       setLevel(nextLevel);
       setTimeout(() => {
@@ -94,6 +89,58 @@ export default function VisualMemoryGame() {
       }, 1500);
     }
   };
+
+  const saveScore = async () => {
+    if (!session?.user?.name) return;
+
+    try {
+      const response = await fetch('/api/scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: session.user.name,
+          visualScore: score
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save score');
+      }
+
+      if (score > (highScore ?? 0)) {
+        setHighScore(score);
+      }
+      
+      const rankResponse = await fetch('/api/user-scores');
+      if (rankResponse.ok) {
+        const data = await rankResponse.json();
+        setRank(data.ranks.visualRank);
+      }
+    } catch (error) {
+      console.error('Error saving score:', error);
+    }
+  };
+
+  const fetchHighScore = async () => {
+    if (!session?.user?.name) return;
+
+    try {
+      const response = await fetch('/api/user-scores');
+      if (response.ok) {
+        const data = await response.json();
+        setHighScore(data.visualScore);
+        setRank(data.ranks.visualRank);
+      }
+    } catch (error) {
+      console.error('Error fetching high score:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHighScore();
+  }, [session]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
@@ -123,7 +170,7 @@ export default function VisualMemoryGame() {
           </div>
 
           {/* Game Stats */}
-          <VisualStats level={level} score={score} highScore={} rank={} />
+          <VisualStats level={level} score={score} highScore={highScore} rank={rank} />
 
           {/* Game Grid */}
           <Card className="p-8">

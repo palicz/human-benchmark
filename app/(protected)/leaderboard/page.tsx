@@ -55,6 +55,15 @@ const games = [
     scoreKey: "stroopScore",
     scoreFormat: (score: number) => `${score} points`,
   },
+  {
+    id: "visual-memory",
+    name: "Visual Memory Test",
+    icon: Eye,
+    color: "text-purple-500",
+    gradient: "from-purple-500 to-pink-500",
+    scoreKey: "visualScore",
+    scoreFormat: (score: number) => `${score} points`,
+  },
 ];
 
 const generateFloatingIcons = () => {

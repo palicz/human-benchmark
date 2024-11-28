@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "./visual-card";
 
 export function GameInstructions() {
   return (

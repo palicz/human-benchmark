@@ -25,6 +25,7 @@ async function getFormattedScores() {
       aimScore: true,
       typeScore: true,
       stroopScore: true,
+      visualScore: true,
       score: true,
       createdAt: true,
     },
@@ -77,6 +78,17 @@ async function getFormattedScores() {
       date: score.createdAt.toISOString(),
     }));
 
+  // Format visual memory test scores
+  const visualScores = allScores
+    .filter(s => s.visualScore !== null)
+    .sort((a, b) => (b.visualScore || 0) - (a.visualScore || 0))
+    .map((score, index) => ({
+      rank: index + 1,
+      username: score.playerName,
+      score: `${score.visualScore} points`,
+      date: score.createdAt.toISOString(),
+    }));
+
   return [
     {
       id: "aim-trainer",
@@ -97,6 +109,11 @@ async function getFormattedScores() {
       id: "stroop-test",
       name: "Stroop Test",
       scores: stroopScores,
+    },
+    {
+      id: "visual-memory",
+      name: "Visual Memory Test",
+      scores: visualScores,
     }
   ];
 }
@@ -146,6 +163,10 @@ export async function DELETE(req: Request) {
         break;
       case "stroop-test":
         updateData.stroopScore = null;
+        break;
+      case "visual-memory":
+        updateData.visualScore = null;
+        break;
       default:
         return new NextResponse("Invalid game type", { status: 400 });
     }

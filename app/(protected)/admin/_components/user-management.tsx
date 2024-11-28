@@ -29,6 +29,21 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
+interface UserStats {
+  aimScore: number | null;
+  typeScore: number | null;
+  score: number | null;
+  stroopScore: number | null;
+  visualScore: number | null;
+  ranks: {
+    aimRank?: number;
+    typeRank?: number;
+    memoryRank?: number;
+    stroopRank?: number;
+    visualRank?: number;
+  };
+}
+
 export function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [users, setUsers] = useState<PrismaUser[]>([]);
@@ -40,18 +55,7 @@ export function UserManagement() {
     email: '',
     role: ''
   });
-  const [userStats, setUserStats] = useState<{
-    aimScore: number | null;
-    typeScore: number | null;
-    score: number | null;
-    stroopScore: number | null;
-    ranks: {
-      aimRank?: number;
-      typeRank?: number;
-      memoryRank?: number;
-      stroopRank?: number;
-    };
-  } | null>(null);
+  const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<PrismaUser | null>(null);
 
@@ -402,15 +406,11 @@ export function UserManagement() {
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Score</span>
-                      <span className="font-medium">
-                        {[userStats?.aimScore, userStats?.typeScore, userStats?.score].filter(score => score !== null).length}
-                      </span>
+                      <span className="font-medium">{userStats?.visualScore ?? "No score"}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-muted-foreground">Rank</span>
-                      <span className="font-medium">
-                        {/* TODO */}
-                      </span>
+                      <Badge variant="secondary">#{userStats?.ranks.visualRank ?? "N/A"}</Badge>
                     </div>
                   </div>
                 </Card>

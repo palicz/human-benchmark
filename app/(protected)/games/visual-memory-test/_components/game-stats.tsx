@@ -3,13 +3,13 @@ import { Brain, Eye, Star, TrendingUp } from "lucide-react";
 import { Card } from "./visual-card";
 
 interface VisualStatsProps {
+  level: number;
   score: number;
   highScore: number | null;
-  level: number;
-  rank?: number;
+  rank: number | null;
 }
 
-export function VisualStats({ score, highScore, level, rank }: VisualStatsProps) {
+export function VisualStats({ level, score, highScore, rank }: VisualStatsProps) {
   const stats = [
     {
       label: "Current Level",
@@ -22,22 +22,22 @@ export function VisualStats({ score, highScore, level, rank }: VisualStatsProps)
       label: "Current Score",
       value: score,
       icon: Brain,
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10",
     },
     {
       label: "Personal Best",
       value: highScore ?? "N/A",
       icon: Eye,
-      color: "text-yellow-500",
-      bgColor: "bg-yellow-500/10",
+      color: "text-pink-500",
+      bgColor: "bg-pink-500/10",
     },
     {
       label: "Global Rank",
       value: rank ? `#${rank}` : "N/A",
       icon: Star,
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
+      color: "text-yellow-500",
+      bgColor: "bg-yellow-500/10",
     },
   ];
 
