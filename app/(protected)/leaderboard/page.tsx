@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
@@ -56,7 +56,7 @@ const games = [
     scoreFormat: (score: number) => `${score} points`,
   },
   {
-    id: "visual-memory",
+    id: "visual-memory-test",
     name: "Visual Memory Test",
     icon: Eye,
     color: "text-purple-500",
@@ -89,58 +89,79 @@ const floatingIcons = generateFloatingIcons();
 export default function LeaderboardPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGame, setSelectedGame] = useState(games[0].id);
-  const [scores, setScores] = useState<Score[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isTabLoading, setIsTabLoading] = useState(false);
+  const [gameScores, setGameScores] = useState<{[key: string]: any[]}>({});
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchScores = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/scores');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const rawResponse = await response.text();
-        console.log('Raw response:', rawResponse);
-        
-        const data = JSON.parse(rawResponse);
-        setScores(data);
-      } catch (error) {
-        console.error('Error fetching scores:', error);
-        setError('Failed to fetch scores');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchGameScores = useCallback(async (gameId: string) => {
+    try {
+      setIsTabLoading(true);
+      const response = await fetch(`/api/scores?game=${gameId}`);
+      if (!response.ok) throw new Error('Failed to fetch');
+      const data = await response.json();
+      
+      const game = games.find(g => g.id === gameId);
+      if (!game) return;
 
-    fetchScores();
+      const processedScores = data
+        .filter((score: Score) => score[game.scoreKey as keyof Score] !== null)
+        .sort((a: Score, b: Score) => {
+          const scoreA = a[game.scoreKey as keyof Score] as number;
+          const scoreB = b[game.scoreKey as keyof Score] as number;
+          return scoreB - scoreA;
+        })
+        .map((score: Score, index: number) => ({
+          rank: index + 1,
+          username: score.playerName,
+          score: game.scoreFormat(score[game.scoreKey as keyof Score] as number),
+          date: new Date(score.createdAt).toLocaleDateString(),
+          change: 0,
+        }));
+
+      setGameScores(prev => ({
+        ...prev,
+        [gameId]: processedScores
+      }));
+    } catch (error) {
+      console.error('Error fetching scores:', error);
+      setError('Failed to fetch scores');
+    } finally {
+      setIsTabLoading(false);
+    }
   }, []);
 
-  const getGameScores = (gameId: string) => {
-    const game = games.find(g => g.id === gameId);
-    if (!game) return [];
+  useEffect(() => {
+    fetchGameScores(games[0].id).finally(() => {
+      setIsLoading(false);
+    });
+  }, [fetchGameScores]);
 
-    return scores
-      .filter(score => score[game.scoreKey as keyof Score] !== null)
-      .sort((a, b) => {
-        const scoreA = a[game.scoreKey as keyof Score] as number;
-        const scoreB = b[game.scoreKey as keyof Score] as number;
-        return scoreB - scoreA;
-      })
-      .map((score, index) => ({
-        rank: index + 1,
-        username: score.playerName,
-        score: game.scoreFormat(score[game.scoreKey as keyof Score] as number),
-        date: new Date(score.createdAt).toLocaleDateString(),
-        change: 0,
-      }));
-  };
+  const handleGameChange = useCallback((gameId: string) => {
+    setSelectedGame(gameId);
+    if (!gameScores[gameId]) {
+      fetchGameScores(gameId);
+    }
+  }, [fetchGameScores, gameScores]);
 
-  const currentGameScores = getGameScores(selectedGame)
-    .filter(score => score.username.toLowerCase().includes(searchTerm.toLowerCase()));
+  const currentGameScores = useMemo(() => {
+    const scores = gameScores[selectedGame] || [];
+    if (!searchTerm) return scores;
+    return scores.filter(score => 
+      score.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [selectedGame, gameScores, searchTerm]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <div className="flex justify-center items-center h-[calc(100vh-4rem)]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background overflow-hidden relative">
@@ -223,7 +244,11 @@ export default function LeaderboardPage() {
               />
             </motion.div>
 
-            <Tabs value={selectedGame} onValueChange={setSelectedGame} className="w-full">
+            <Tabs 
+              value={selectedGame} 
+              onValueChange={handleGameChange}
+              className="w-full"
+            >
               <TabsList className="flex justify-center mb-8">
                 {games.map((game) => (
                   <TabsTrigger
@@ -246,94 +271,91 @@ export default function LeaderboardPage() {
                 ))}
               </TabsList>
 
-              <AnimatePresence mode="wait">
-                {isLoading ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-                  </div>
-                ) : (
-                  games.map((game) => (
-                    <TabsContent key={game.id} value={game.id}>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="grid gap-4"
+              {isTabLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                </div>
+              ) : (
+                <TabsContent 
+                  key={selectedGame}
+                  value={selectedGame}
+                  className="outline-none"
+                >
+                  <motion.div
+                    key={selectedGame}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="grid gap-4"
+                  >
+                    {currentGameScores.map((score, index) => (
+                      <Card
+                        key={`${score.username}-${score.rank}`}
+                        className="p-4 hover:shadow-lg transition-all duration-300 group relative overflow-hidden"
                       >
-                        {currentGameScores.map((score, index) => (
-                          <motion.div
-                            key={`${score.username}-${score.rank}`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                          >
-                            <Card className="p-4 hover:shadow-lg transition-all duration-300 group relative overflow-hidden">
-                              <motion.div
-                                className={`absolute inset-0 bg-gradient-to-r ${game.gradient}`}
-                                initial={{ opacity: 0 }}
-                                whileHover={{ opacity: 0.05 }}
-                                transition={{ duration: 0.2 }}
-                              />
-                              <div className="flex items-center justify-between relative z-10">
-                                <div className="flex items-center gap-4">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-8 text-center font-bold">
-                                      {score.rank <= 3 ? (
-                                        <Medal className={`w-6 h-6 ${
-                                          score.rank === 1 ? "text-yellow-500" :
-                                          score.rank === 2 ? "text-gray-400" :
-                                          "text-amber-600"
-                                        }`} />
-                                      ) : (
-                                        `#${score.rank}`
-                                      )}
-                                    </div>
-                                    <motion.div
-                                      animate={{ scale: [1, 1.2, 1] }}
-                                      transition={{
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        repeatDelay: Math.random() * 5,
-                                      }}
-                                    >
-                                      <Star className={`w-4 h-4 ${score.rank <= 10 ? game.color : "text-muted"}`} />
-                                    </motion.div>
-                                  </div>
-                                  <div>
-                                    <div className="font-semibold">
-                                      {score.username}
-                                    </div>
-                                    <Badge variant="secondary">
-                                      {score.date}
-                                    </Badge>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                  <div className="text-xl font-bold">{score.score}</div>
-                                  {score.change !== 0 && (
-                                    <motion.div
-                                      initial={{ opacity: 0 }}
-                                      animate={{ opacity: 1 }}
-                                      className={`text-sm ${
-                                        score.change > 0
-                                          ? "text-green-500"
-                                          : "text-red-500"
-                                      }`}
-                                    >
-                                      {score.change > 0 ? "↑" : "↓"}
-                                    </motion.div>
-                                  )}
-                                </div>
+                        <motion.div
+                          className={`absolute inset-0 bg-gradient-to-r ${games.find(g => g.id === selectedGame)?.gradient}`}
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 0.05 }}
+                          transition={{ duration: 0.2 }}
+                        />
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 text-center font-bold">
+                                {score.rank <= 3 ? (
+                                  <Medal className={`w-6 h-6 ${
+                                    score.rank === 1 ? "text-yellow-500" :
+                                    score.rank === 2 ? "text-gray-400" :
+                                    "text-amber-600"
+                                  }`} />
+                                ) : (
+                                  `#${score.rank}`
+                                )}
                               </div>
-                            </Card>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    </TabsContent>
-                  ))
-                )}
-              </AnimatePresence>
+                              <motion.div
+                                animate={{ scale: [1, 1.2, 1] }}
+                                transition={{
+                                  duration: 2,
+                                  repeat: Infinity,
+                                  repeatDelay: Math.random() * 5,
+                                }}
+                              >
+                                <Star className={`w-4 h-4 ${score.rank <= 10 ? games.find(g => g.id === selectedGame)?.color : "text-muted"}`} />
+                              </motion.div>
+                            </div>
+                            <div>
+                              <div className="font-semibold">
+                                {score.username}
+                              </div>
+                              <Badge variant="secondary">
+                                {score.date}
+                              </Badge>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-4">
+                            <div className="text-xl font-bold">{score.score}</div>
+                            {score.change !== 0 && (
+                              <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className={`text-sm ${
+                                  score.change > 0
+                                    ? "text-green-500"
+                                    : "text-red-500"
+                                }`}
+                              >
+                                {score.change > 0 ? "↑" : "↓"}
+                              </motion.div>
+                            )}
+                          </div>
+                        </div>
+                      </Card>
+                    ))}
+                  </motion.div>
+                </TabsContent>
+              )}
             </Tabs>
           </motion.div>
         </div>
