@@ -13,9 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import { MemoryStats } from "./_components/memory-stats";
 
 type GameState = "ready" | "memorize" | "recall" | "feedback" | "gameover";
+let firstTime=true;
 
 const startInfiniteConfetti = () => {
   let frameId: number;
+
   const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
   
   const frame = () => {
@@ -70,6 +72,7 @@ export default function NumberMemoryGame() {
     setCurrentNumber(newNumber);
     setGameState("memorize");
     setTimeLeft(Math.min(7, 3 + Math.floor(level / 4)));
+    firstTime=false
   };
 
   const saveScore = async () => {
@@ -233,6 +236,7 @@ export default function NumberMemoryGame() {
     };
   }, [gameState, score, highScore]);
 
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <Navbar />
@@ -302,9 +306,24 @@ export default function NumberMemoryGame() {
                   exit={{ opacity: 0 }}
                   className="text-center space-y-6"
                 >
-                  <h2 className="text-2xl font-semibold">Ready to continue?</h2>
-                  <p className="text-muted-foreground">Current Score: {score}</p>
-                  <Button onClick={startLevel} size="lg">
+                  {firstTime ?(
+                      <>
+                  <h2 className="text-2xl font-semibold">Ready to test your memory with numbers?</h2>
+                  <p className="text-muted-foreground">Remember the increasing amount of numbers and type them back correctly</p>
+                  </>
+                      ):(
+                          <>
+                            <h2 className="text-2xl font-semibold">Ready to continue?</h2>
+                            <p className="text-muted-foreground">Current Score: {score}</p>
+                          </>
+                      )}
+                  <Button
+                      onClick={() => {
+                        startLevel();
+
+                      }}
+                      size="lg"
+                  >
                     Start
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
@@ -423,6 +442,7 @@ export default function NumberMemoryGame() {
                           setLevel(1);
                           setGameState("ready");
                           setUserInput("");
+                          firstTime=true;
                         }}
                         size="lg"
                         className="mt-4"
