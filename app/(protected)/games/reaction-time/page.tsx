@@ -16,7 +16,7 @@ type GameState = "ready" | "waiting" | "click" | "result" | "gameover";
 const startInfiniteConfetti = () => {
   let frameId: number;
   const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
-  
+
   const frame = () => {
     confetti({
       particleCount: 2,
@@ -25,7 +25,7 @@ const startInfiniteConfetti = () => {
       origin: { x: 0 },
       colors: colors
     });
-    
+
     confetti({
       particleCount: 2,
       angle: 120,
@@ -47,6 +47,7 @@ export default function ReactionTimeTest() {
   const [reactionTime, setReactionTime] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [bestTime, setBestTime] = useState<number | null>(null);
+  const [highScore, setHighScore] = useState<number | null>(null);
   const [averageTime, setAverageTime] = useState<number | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [isConfettiActive, setIsConfettiActive] = useState(false);
@@ -61,12 +62,11 @@ export default function ReactionTimeTest() {
       setStartTime(Date.now());
     }, delay);
     if (attempts >= 5) {
-        // Reset the game if we've reached 5 attempts
-        setBestTime(null);
-        setAverageTime(null);
-        setAttempts(0);
+      setBestTime(null);
+      setAverageTime(null);
+      setAttempts(0);
     }
-    
+
   }, []);
 
   const handleClick = useCallback(() => {
@@ -85,7 +85,7 @@ export default function ReactionTimeTest() {
         triggerConfetti();
       }
 
-      setAverageTime(prev => 
+      setAverageTime(prev =>
         prev === null ? time : Math.round((prev * attempts + time) / newAttempts)
       );
 
@@ -100,7 +100,7 @@ export default function ReactionTimeTest() {
 
   const saveScore = async () => {
     if (!session?.user?.name || !bestTime) return;
-    
+
     try {
       const response = await fetch('/api/scores', {
         method: 'POST',
@@ -109,7 +109,7 @@ export default function ReactionTimeTest() {
         },
         body: JSON.stringify({
           name: session.user.name,
-          score: bestTime
+          reactionScore: bestTime
         }),
       });
 
@@ -124,6 +124,21 @@ export default function ReactionTimeTest() {
       }
     } catch (error) {
       console.error('Error saving score:', error);
+    }
+  };
+
+  const fetchHighScore = async () => {
+    if (!session?.user?.name) return;
+
+    try {
+      const response = await fetch('/api/user-scores');
+      if (response.ok) {
+        const data = await response.json();
+        setHighScore(data.reactionScore);
+        setRank(data.ranks.reactionRank);
+      }
+    } catch (error) {
+      console.error('Error fetching high score:', error);
     }
   };
 
@@ -192,15 +207,20 @@ export default function ReactionTimeTest() {
     }
   }, [attempts]);
 
+
+  useEffect(() => {
+    fetchHighScore();
+  }, [session]);
+
   const generateFloatingIcons = () => {
     const positions = [
-      { x: 15, y: 25 }, { x: 35, y: 45 }, { x: 55, y: 15 }, 
+      { x: 15, y: 25 }, { x: 35, y: 45 }, { x: 55, y: 15 },
       { x: 75, y: 65 }, { x: 25, y: 85 }, { x: 45, y: 35 },
       { x: 65, y: 75 }, { x: 85, y: 25 }, { x: 20, y: 55 },
       { x: 40, y: 15 }, { x: 60, y: 85 }, { x: 80, y: 45 },
       { x: 30, y: 65 }, { x: 50, y: 35 }, { x: 70, y: 95 }
     ];
-  
+
     return positions.map((pos, i) => ({
       icon: [Zap, Crosshair, Timer, Gauge][i % 4],
       initialX: pos.x,
@@ -209,7 +229,7 @@ export default function ReactionTimeTest() {
       delay: -1 * (i * 1.3),
     }));
   };
-  
+
   const floatingIcons = generateFloatingIcons();
 
   return (
@@ -236,7 +256,7 @@ export default function ReactionTimeTest() {
           <item.icon className="w-12 h-12" />
         </motion.div>
       ))}
-      
+
       <div className="container max-w-4xl mx-auto pt-24 px-6 pb-16 relative">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -272,93 +292,93 @@ export default function ReactionTimeTest() {
 
           {/* Game Area */}
           <Card className="p-8">
-          <div className="h-[300px] w-full flex items-center justify-center">
-            <AnimatePresence mode="wait">
-              {gameState === "ready" && (
-                <motion.div
-                  key="ready"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center space-y-6"
-                >
-                  <h2 className="text-2xl font-semibold">Ready to test your reflexes?</h2>
-                  <Button onClick={startTest} size="lg">
-                    Start Test
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </motion.div>
-              )}
+            <div className="h-[300px] w-full flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                {gameState === "ready" && (
+                  <motion.div
+                    key="ready"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-6"
+                  >
+                    <h2 className="text-2xl font-semibold">Ready to test your reflexes?</h2>
+                    <Button onClick={startTest} size="lg">
+                      Start Test
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </motion.div>
+                )}
 
-              {gameState === "waiting" && (
+                {gameState === "waiting" && (
                   <div className="w-48 h-48 mx-auto bg-red-500 rounded-md flex items-center justify-center cursor-pointer w-[100%] h-[100%]"
-                  onClick={handleClick}>
+                    onClick={handleClick}>
                     <span className="text-white text-2xl font-bold">Wait...</span>
                   </div>
-              )}
+                )}
 
-              {gameState === "click" && (
-                <div 
-                  className="w-full h-48 mx-auto bg-green-500 rounded-md flex items-center justify-center cursor-pointer w-[100%] h-[100%]"
-                  onClick={handleClick}
-                >
-                  <span className="text-white text-2xl font-bold">Click!</span>
-                </div>
-              )}
-
-              {gameState === "result" && (
-                <motion.div
-                  key="result"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center space-y-6"
-                >
-                  <h2 className="text-2xl font-semibold">
-                    {reactionTime === null ? "Too early!" : `Your reaction time: ${reactionTime} ms`}
-                  </h2>
-                  <Button onClick={startTest} size="lg">
-                    {attempts >= 5 ? "Play Again" : "Next Round"}
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </motion.div>
-              )}
-
-              {gameState === "gameover" && (
-                <motion.div
-                  key="gameover"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center space-y-6"
-                >
-                  <h2 className="text-4xl font-bold text-primary">
-                    Game Over!
-                  </h2>
-                  <div className="space-y-4">
-                    <Badge variant="default" className="text-2xl px-6 py-3 bg-primary hover:bg-primary">
-                      Best Time: {bestTime} ms
-                    </Badge>
-                    <Badge variant="secondary" className="text-xl px-4 py-2">
-                      Average Time: {averageTime} ms
-                    </Badge>
-                  </div>
-                  <Button
-                    onClick={() => {
-                      setBestTime(null);
-                      setAverageTime(null);
-                      setAttempts(0);
-                      setGameState("ready");
-                    }}
-                    size="lg"
-                    className="mt-4"
+                {gameState === "click" && (
+                  <div
+                    className="w-full h-48 mx-auto bg-green-500 rounded-md flex items-center justify-center cursor-pointer w-[100%] h-[100%]"
+                    onClick={handleClick}
                   >
-                    Play Again
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    <span className="text-white text-2xl font-bold">Click!</span>
+                  </div>
+                )}
+
+                {gameState === "result" && (
+                  <motion.div
+                    key="result"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-6"
+                  >
+                    <h2 className="text-2xl font-semibold">
+                      {reactionTime === null ? "Too early!" : `Your reaction time: ${reactionTime} ms`}
+                    </h2>
+                    <Button onClick={startTest} size="lg">
+                      {attempts >= 5 ? "Play Again" : "Next Round"}
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </motion.div>
+                )}
+
+                {gameState === "gameover" && (
+                  <motion.div
+                    key="gameover"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-6"
+                  >
+                    <h2 className="text-4xl font-bold text-primary">
+                      Game Over!
+                    </h2>
+                    <div className="space-y-4">
+                      <Badge variant="default" className="text-2xl px-6 py-3 bg-primary hover:bg-primary">
+                        Best Time: {bestTime} ms
+                      </Badge>
+                      <Badge variant="secondary" className="text-xl px-4 py-2">
+                        Average Time: {averageTime} ms
+                      </Badge>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        setBestTime(null);
+                        setAverageTime(null);
+                        setAttempts(0);
+                        setGameState("ready");
+                      }}
+                      size="lg"
+                      className="mt-4"
+                    >
+                      Play Again
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </Card>
 
@@ -373,7 +393,7 @@ export default function ReactionTimeTest() {
               <li>You have 5 attempts to set your best time</li>
             </ul>
           </Card>
-          
+
         </motion.div>
       </div>
     </div>
