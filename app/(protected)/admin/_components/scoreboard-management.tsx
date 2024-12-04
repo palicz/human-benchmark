@@ -252,7 +252,6 @@ export function ScoreboardManagement() {
                         ${score.rank === 1 && "bg-yellow-500 hover:bg-yellow-600"}
                         ${score.rank === 2 && "bg-gray-400 hover:bg-gray-500"}
                         ${score.rank === 3 && "bg-amber-700 hover:bg-amber-800"}
-                        ${score.rank === 4 && "bg-red-600 hover:bg-red-700"}
                       `}
                     >
                       #{score.rank}
