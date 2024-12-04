@@ -13,16 +13,17 @@ enum UserRole {
 }
 
 model Scoreboard {
-  id         Int      @id @default(autoincrement())
-  playerName String   @unique
-  score      Int?
-  aimScore   Int?
-  typeScore  Int?
-  visualScore Int?
-  stroopScore Int?
-  createdAt  DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  playerName    String   @unique
+  score         Int?
+  aimScore      Int?
+  typeScore     Int?
+  visualScore   Int?
+  stroopScore   Int?
+  reactionScore Int?
+  createdAt     DateTime @default(now())
 
-    @@map("scoreboard")
+  @@map("scoreboard")
 }
 
 model User {
