@@ -182,17 +182,8 @@ export default function Home() {
       </section>
 
       {/* Games Section */}
-      <section id="games" className="py-16 px-6">
+      <section id="games" className="py-16 px-6 max-w-8xl">
         <div className="max-w-8xl mx-auto">
-          <motion.div
-            animate={{
-              boxShadow: highlightGames
-                ? "0 0 20px 10px rgba(var(--primary-rgb), 0.3)"
-                : "none",
-            }}
-            transition={{ duration: 0.5 }}
-            className="rounded-2xl p-8"
-          >
             <motion.h2
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -212,6 +203,9 @@ export default function Home() {
                   transition={{ delay: game.delay }}
                   viewport={{ once: true }}
                   className={`relative overflow-hidden rounded-xl bg-gradient-to-r ${game.color} p-1`}
+                  animate={{
+                    boxShadow: highlightGames ? "0 0 20px 10px rgba(var(--primary-rgb), 0.3)" : "none",
+                  }}
                 >
                   <div className="bg-background rounded-lg p-6 h-full">
                     <game.icon className="w-12 h-12 mb-4"/>
@@ -227,7 +221,6 @@ export default function Home() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
         </div>
       </section>
 
