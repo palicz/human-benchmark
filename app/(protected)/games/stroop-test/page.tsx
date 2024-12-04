@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Palette, ArrowRight, Brain, Timer, Crosshair, Eye } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Navbar } from "@/components/layout/navbar";
 import { useSession } from "next-auth/react";
 import { StroopStats } from "./_components/stroop-stats";
-import { StroopCard } from "./_components/stroop-card";
+import { Card } from "./_components/stroop-card";
 import { StroopButton } from "./_components/stroop-button";
+import CardDisplay from "./_components/CardDisplay";
 
 type GameState = "ready" | "playing" | "gameover";
 
@@ -253,7 +253,7 @@ export default function StroopTest() {
                   exit={{ opacity: 0 }}
                   className="space-y-6"
                 >
-                  <StroopCard word={currentWord} color={currentColor} />
+                  <CardDisplay word={currentWord} color={currentColor} />
                   <div className="grid grid-cols-2 gap-4">
                     {options.map((option, index) => (
                       <StroopButton

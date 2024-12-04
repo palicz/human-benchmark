@@ -1,41 +1,41 @@
 import { motion } from "framer-motion";
-import { Eye, Palette, Star, Clock } from 'lucide-react';
-import { Card } from "@/app/(protected)/games/stroop-test/_components/stroop-card";
+import { Zap, Clock, Hash, TrendingUp } from "lucide-react";
+import { Card } from "@/app/(protected)/games/reaction-time/_components/reaction-card";
 
-interface StroopStatsProps {
-  score: number;
-  highScore: number | null;
-  timeLeft: number;
+interface ReactionStatsProps {
+  bestTime: number | null;
+  averageTime: number | null;
+  attempts: number;
   rank?: number;
 }
 
-export function StroopStats({ score, highScore, timeLeft, rank }: StroopStatsProps) {
+export function ReactionStats({ bestTime, averageTime, attempts, rank }: ReactionStatsProps) {
   const stats = [
     {
-      label: "Time Left",
-      value: `${timeLeft}s`,
-      icon: Clock,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
-    },
-    {
-      label: "Current Score",
-      value: score,
-      icon: Palette,
-      color: "text-red-500",
-      bgColor: "bg-red-500/10",
-    },
-    {
-      label: "Personal Best",
-      value: highScore ?? "N/A",
-      icon: Eye,
+      label: "Best Time",
+      value: bestTime ? `${bestTime} ms` : "N/A",
+      icon: Zap,
       color: "text-yellow-500",
       bgColor: "bg-yellow-500/10",
     },
     {
+      label: "Average Time",
+      value: averageTime ? `${averageTime} ms` : "N/A",
+      icon: Clock,
+      color: "text-blue-500",
+      bgColor: "bg-blue-500/10",
+    },
+    {
+      label: "Attempts",
+      value: attempts,
+      icon: Hash,
+      color: "text-green-500",
+      bgColor: "bg-green-500/10",
+    },
+    {
       label: "Global Rank",
       value: rank ? `#${rank}` : "N/A",
-      icon: Star,
+      icon: TrendingUp,
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
     },
