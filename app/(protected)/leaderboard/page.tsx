@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette } from "lucide-react";
+import {Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette, Zap} from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Input } from "@/app/(protected)/leaderboard/_components/leaderboard-input";
 import { Card } from "@/app/(protected)/leaderboard/_components/leaderboard-card";
@@ -56,6 +56,15 @@ const games = [
     scoreFormat: (score: number) => `${score} points`,
   },
   {
+    id: "reaction-time",
+    name: "Reaction Test",
+    icon: Zap,
+    color: "text-cyan-500",
+    gradient: "from-cyan-500 to-blue-500",
+    scoreKey: "reactionScore",
+    scoreFormat: (score: number) => `${score} ms`,
+  },
+  {
     id: "visual-memory-test",
     name: "Visual Memory Test",
     icon: Eye,
@@ -103,8 +112,9 @@ export default function LeaderboardPage() {
       
       const game = games.find(g => g.id === gameId);
       if (!game) return;
-
-      const processedScores = data
+      let processedScores;
+      if(gameId!='reaction-time'){
+       processedScores = data
         .filter((score: Score) => score[game.scoreKey as keyof Score] !== null)
         .sort((a: Score, b: Score) => {
           const scoreA = a[game.scoreKey as keyof Score] as number;
@@ -117,7 +127,23 @@ export default function LeaderboardPage() {
           score: game.scoreFormat(score[game.scoreKey as keyof Score] as number),
           date: new Date(score.createdAt).toLocaleDateString(),
           change: 0,
-        }));
+        }))}
+      else{
+        processedScores = data
+            .filter((score: Score) => score[game.scoreKey as keyof Score] !== null)
+            .sort((a: Score, b: Score) => {
+              const scoreA = a[game.scoreKey as keyof Score] as number;
+              const scoreB = b[game.scoreKey as keyof Score] as number;
+              return scoreA - scoreB;
+            })
+            .map((score: Score, index: number) => ({
+              rank: index + 1,
+              username: score.playerName,
+              score: game.scoreFormat(score[game.scoreKey as keyof Score] as number),
+              date: new Date(score.createdAt).toLocaleDateString(),
+              change: 0,
+            }))
+      };
 
       setGameScores(prev => ({
         ...prev,

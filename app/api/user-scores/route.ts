@@ -92,6 +92,7 @@ export async function GET() {
                 score: true,
                 stroopScore: true,
                 visualScore: true,
+                reactionScore:true,
             }
         });
 
