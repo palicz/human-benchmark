@@ -10,6 +10,7 @@ interface GameRanks {
     memoryRank?: number;
     stroopRank?: number;
     visualRank?: number;
+    reactionRank?:number;
 }
 
 async function calculateUserRanks(userName: string): Promise<GameRanks> {
@@ -21,6 +22,7 @@ async function calculateUserRanks(userName: string): Promise<GameRanks> {
             score: true,
             stroopScore: true,
             visualScore: true,
+            reactionScore:true,
         },
     });
 
@@ -61,6 +63,12 @@ async function calculateUserRanks(userName: string): Promise<GameRanks> {
             .sort((a, b) => (b.visualScore || 0) - (a.visualScore || 0));
         const visualRank = visualScores.findIndex(s => s.playerName === userName) + 1;
         if (visualRank > 0) ranks.visualRank = visualRank;
+
+        const reactionScores=allScores
+            .filter(s=>s.reactionScore!==null)
+            .sort((a,b)=>(b.reactionScore||0)-(a.reactionScore||0));
+        const reactionRank=reactionScores.findIndex(s=>s.playerName===userName)+1;
+        if(reactionRank>0) ranks.reactionRank=reactionRank
     }
 
     return ranks;

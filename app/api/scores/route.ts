@@ -34,7 +34,7 @@ export async function POST(req: Request) {
                     typeScore: typeScore !== undefined && typeScore > (existingScore.typeScore ?? 0) ? typeScore : existingScore.typeScore,
                     stroopScore: stroopScore !== undefined && stroopScore > (existingScore.stroopScore ?? 0) ? stroopScore : existingScore.stroopScore,
                     visualScore: visualScore !== undefined && visualScore > (existingScore.visualScore ?? 0) ? visualScore : existingScore.visualScore,
-                    reactionScore: reactionScore !== undefined && reactionScore > (existingScore.reactionScore ?? 0) ? reactionScore : existingScore.reactionScore,
+                    reactionScore: reactionScore !== undefined && reactionScore < (existingScore.reactionScore ?? 0) ? reactionScore : existingScore.reactionScore,
                 },
             });
             return NextResponse.json(updatedScore, { status: 200 });
