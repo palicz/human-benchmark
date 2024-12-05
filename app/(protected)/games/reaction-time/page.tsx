@@ -205,7 +205,7 @@ export default function ReactionTimeTest() {
       setGameState("gameover");
       saveScore();
     }
-  }, [attempts]);
+  }, [attempts, saveScore]);
 
 
   useEffect(() => {
