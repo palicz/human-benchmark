@@ -2,15 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  Brain, 
-  Crosshair, 
+import {
+  Brain,
+  Crosshair,
   Timer,
   ArrowUpDown,
   MoreVertical,
   Search,
   Palette,
-  Eye
+  Eye, Bolt, Zap
 } from "lucide-react";
 import { Card } from "@/app/(protected)/admin/_components/admin-card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,8 @@ const gameIcons = {
   "number-memory": { icon: Brain, color: "text-blue-500" },
   "typing-test": { icon: Timer, color: "text-green-500" },
   "stroop-test": { icon: Palette, color: "text-red-500" },
-  "visual-memory": { icon: Eye, color: "text-purple-500" }
+  "visual-memory": { icon: Eye, color: "text-purple-500" },
+  "reaction-time":{icon:Zap,color:"text-cyan-500"}
 };
 
 export function ScoreboardManagement() {
