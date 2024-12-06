@@ -2,12 +2,19 @@
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette, Zap} from "lucide-react";
+import {Brain, Timer, Eye, Trophy, Search, Medal, Crown, Star, Crosshair, Palette, Zap, ChevronDown} from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { Input } from "@/app/(protected)/leaderboard/_components/leaderboard-input";
 import { Card } from "@/app/(protected)/leaderboard/_components/leaderboard-card";
 import { Badge } from "@/app/(protected)/leaderboard/_components/leaderboard-badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/(protected)/leaderboard/_components/leaderboard-tabs";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface Score {
   id: string;
@@ -275,7 +282,48 @@ export default function LeaderboardPage() {
               onValueChange={handleGameChange}
               className="w-full"
             >
-              <TabsList className="flex justify-center mb-8">
+              {/* Mobile Dropdown */}
+              <div className="md:hidden w-full max-w-md mx-auto mb-8">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between relative bg-background before:pointer-events-none before:absolute before:-inset-[3px] before:rounded-[10px] before:bg-[linear-gradient(45deg,#ff0000,#ff7300,#fffb00,#48ff00,#00ffd5,#002bff,#7a00ff,#ff00c8,#ff0000)] before:blur-md before:opacity-40 before:animate-[border_4s_linear_infinite] before:bg-[length:400%]"
+                    >
+                      <div className="relative flex items-center gap-2 z-10">
+                        {(() => {
+                          const currentGame = games.find(g => g.id === selectedGame);
+                          if (!currentGame) return null;
+                          const GameIcon = currentGame.icon;
+                          return (
+                            <>
+                              <GameIcon className={`w-4 h-4 ${currentGame.color}`} />
+                              <span>{currentGame.name}</span>
+                            </>
+                          );
+                        })()}
+                      </div>
+                      <ChevronDown className="relative h-4 w-4 opacity-50 z-10" />
+                      <div className="absolute inset-0 bg-background rounded-md border border-input z-[1]" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full min-w-[240px]">
+                    {games.map((game) => (
+                      <DropdownMenuItem
+                        key={game.id}
+                        onClick={() => handleGameChange(game.id)}
+                        className="flex items-center gap-2"
+                      >
+                        <game.icon className={`w-4 h-4 ${game.color}`} />
+                        {game.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Desktop/Tablet Tabs */}
+              <TabsList className="hidden md:flex justify-center mb-8">
                 {games.map((game) => (
                   <TabsTrigger
                     key={game.id}
