@@ -17,6 +17,13 @@ interface SelectFields {
 }
 
 export async function POST(req: Request) {
+    const maxIdRecord = await prisma.scoreboard.findFirst({
+        orderBy: { id: 'desc' },
+        select: { id: true },
+    });
+
+    // Determine the new id (maxId + 1 or default to 1 if no records exist)
+    const newId = (maxIdRecord?.id || 0) + 1;
     const body = await req.json();
     const { name, score, aimScore, typeScore, stroopScore, visualScore,reactionScore } = body;
 
@@ -43,8 +50,9 @@ export async function POST(req: Request) {
         }
 
         const newScore = await prisma.scoreboard.create({
-            data: { playerName: name, score, aimScore, typeScore, stroopScore, visualScore ,reactionScore},
+            data: { id:newId,playerName: name, score, aimScore, typeScore, stroopScore, visualScore ,reactionScore},
         });
+
         return NextResponse.json(newScore, { status: 201 });
     } catch (error) {
         console.error('Error saving score:', error);
