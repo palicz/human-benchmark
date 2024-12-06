@@ -10,6 +10,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 import { useSession } from "next-auth/react";
 import { UserButton } from "@/components/auth/user-button";
@@ -98,13 +99,14 @@ export function Navbar() {
             <SheetContent>
               <div className="flex flex-col space-y-4 mt-8">
                 {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-lg font-medium"
-                  >
-                    {item.name}
-                  </Link>
+                  <SheetClose asChild key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-lg font-medium"
+                    >
+                      {item.name}
+                    </Link>
+                  </SheetClose>
                 ))}
                 {status === "loading" ? (
                   <Button disabled>
@@ -113,10 +115,14 @@ export function Navbar() {
                 ) : status === "authenticated" ? (
                   <UserButton />
                 ) : (
-                  <Button className="w-full">
-                    <User className="w-4 h-4 mr-2" />
-                    Sign In
-                  </Button>
+                  <SheetClose asChild>
+                    <CustomRedirect href={`/auth/login`}>
+                      <Button className="w-full">
+                        <User className="w-4 h-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </CustomRedirect>
+                  </SheetClose>
                 )}
               </div>
             </SheetContent>
