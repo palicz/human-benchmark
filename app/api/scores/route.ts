@@ -101,7 +101,7 @@ export async function GET(req: Request) {
                 ...(game === 'typing-test' ? [{ typeScore: Prisma.SortOrder.desc }] : []),
                 ...(game === 'stroop-test' ? [{ stroopScore: Prisma.SortOrder.desc }] : []),
                 ...(game === 'visual-memory-test' ? [{ visualScore: Prisma.SortOrder.desc }] : []),
-                ...(game === 'reaction-time' ? [{ reactionScore: Prisma.SortOrder.desc }] : []),
+                ...(game === 'reaction-time' ? [{ reactionScore: Prisma.SortOrder.asc }] : []),
             ],
             take: 100, // Limit results for better performance
         });
