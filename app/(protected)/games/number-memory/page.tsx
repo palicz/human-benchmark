@@ -12,7 +12,7 @@ import confetti from 'canvas-confetti';
 import { Badge } from "@/components/ui/badge";
 import { MemoryStats } from "./_components/memory-stats";
 
-type GameState = "ready" | "memorize" | "recall" | "feedback" | "gameover";
+type GameState = "ready" | "memorize" | "recall" | "feedback" | "gameover" | "loading";
 let firstTime=true;
 
 const startInfiniteConfetti = () => {
@@ -162,7 +162,15 @@ export default function NumberMemoryGame() {
       }
       
       setUserInput("");
-      setGameState("ready");
+      setGameState("loading");
+      
+      // Start next level after 1 second delay
+      setTimeout(() => {
+        const newNumber = generateNumber(level + 1);
+        setCurrentNumber(newNumber);
+        setGameState("memorize");
+        setTimeLeft(Math.min(7, 3 + Math.floor((level + 1) / 4)));
+      }, 1000);
     } else {
       setGameState("gameover");
       await saveScore();
@@ -369,12 +377,31 @@ export default function NumberMemoryGame() {
                       onChange={(e) => setUserInput(e.target.value)}
                       className="text-center text-2xl max-w-[200px] mx-auto [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          checkAnswer();
+                        }
+                      }}
                     />
                   </div>
                   <div className="flex justify-center">
                     <Button onClick={checkAnswer} size="lg">
                       Submit Answer
                     </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {gameState === "loading" && (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="text-center space-y-6 min-h-[200px] flex flex-col items-center justify-center"
+                >
+                  <div className="animate-spin">
+                    <Brain className="w-24 h-24 text-gray-400" />
                   </div>
                 </motion.div>
               )}
