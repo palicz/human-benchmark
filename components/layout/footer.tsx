@@ -53,7 +53,8 @@ export default function Footer() {
               { name: "Number Memory Test", path: "/games/number-memory" },
               { name: "Typing Test", path: "/games/typing-test" },
               { name: "Visual Memory Test", path: "/games/visual-memory" },
-              { name: "Stroop Test", path: "/games/stroop-test" }
+              { name: "Stroop Test", path: "/games/stroop-test" },
+              { name: "Reaction Time Test", path: "/games/reaction-time" }
 
             ].map((game) => (
               <li key={game.name} className="transition-transform hover:translate-x-1">
