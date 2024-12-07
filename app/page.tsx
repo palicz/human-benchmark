@@ -284,7 +284,11 @@ export default function Home() {
               >
                 <AccordionItem value={item.value}>
                   <AccordionTrigger>{item.title}</AccordionTrigger>
-                  <AccordionContent>{item.content}</AccordionContent>
+                  <AccordionContent>
+                    <p className="w-[50%] sm:w-full overflow-x-hidden break-words">
+                      {item.content}
+                    </p>
+                  </AccordionContent>
                 </AccordionItem>
               </motion.div>
             ))}

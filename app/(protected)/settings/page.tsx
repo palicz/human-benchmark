@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair, Palette } from "lucide-react";
+import { Brain, Timer, Eye, Mail, Hash, Shield, Crosshair, Palette, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Card } from "@/app/(protected)/settings/_components/stats-card";
 import { Badge } from "@/app/(protected)/settings/_components/stats-badge";
@@ -16,11 +16,15 @@ interface UserScores {
     typeScore: number | null;
     score: number | null;
     stroopScore: number | null;
+    visualScore: number | null;
+    reactionScore: number | null;
     ranks: {
         aimRank?: number;
         typeRank?: number;
         memoryRank?: number;
-        stroopRank? : number;
+        stroopRank?: number;
+        visualRank?: number;
+        reactionRank?: number;
     };
 }
 
@@ -71,11 +75,25 @@ export default function ProfilePage() {
         color: "text-green-500",
     },
     {
+      name: "Visual Memory Test",
+      icon: Eye,
+      score: userScores?.visualScore ? `${userScores?.visualScore} points` : "No score yet",
+      rank: userScores?.ranks.visualRank ? `#${userScores.ranks.visualRank}` : "N/A",
+      color: "text-purple-500",
+    },
+    {
       name: "Stroop Time Test",
       icon: Palette,
       score: userScores?.stroopScore ? `${userScores?.stroopScore} points` : "No score yet",
       rank: userScores?.ranks.stroopRank ? `#${userScores.ranks.stroopRank}` : "N/A",
       color: "text-red-500",
+    },
+    {
+      name: "Reaction Time Test",
+      icon: Zap,
+      score: userScores?.reactionScore ? `${userScores?.reactionScore} ms` : "No score yet",
+      rank: userScores?.ranks.reactionRank ? `#${userScores.ranks.reactionRank}` : "N/A",
+      color: "text-blue-300",
     }
 ];
 

@@ -65,11 +65,11 @@ async function calculateUserRanks(userName: string): Promise<GameRanks> {
         const visualRank = visualScores.findIndex(s => s.playerName === userName) + 1;
         if (visualRank > 0) ranks.visualRank = visualRank;
 
-        const reactionScores=allScores
-            .filter(s=>s.reactionScore!==null)
-            .sort((a,b)=>(b.reactionScore||0)-(a.reactionScore||0));
-        const reactionRank=reactionScores.findIndex(s=>s.playerName===userName)+1;
-        if(reactionRank>0) ranks.reactionRank=reactionRank
+        const reactionScores = allScores
+        .filter(s => s.reactionScore !== null)
+        .sort((a, b) => (a.reactionScore || 0) - (b.reactionScore || 0));
+        const reactionRank = reactionScores.findIndex(s => s.playerName === userName) + 1;
+        if (reactionRank > 0) ranks.reactionRank = reactionRank;
     }
     return ranks;
 }
