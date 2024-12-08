@@ -11,7 +11,7 @@ import confetti from 'canvas-confetti';
 import { Badge } from "@/components/ui/badge";
 import { ReactionStats } from "@/app/(protected)/games/reaction-time/_components/reaction-stats";
 
-type GameState = "ready" | "waiting" | "click" | "result" | "gameover";
+type GameState = "ready" | "waiting" | "click" | "result" | "gameover" | "tooEarly";
 
 const startInfiniteConfetti = () => {
   let frameId: number;
@@ -53,14 +53,17 @@ export default function ReactionTimeTest() {
   const [isConfettiActive, setIsConfettiActive] = useState(false);
   const { data: session } = useSession();
   const [rank, setRank] = useState<number | undefined>();
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const [tooEarly, setTooEarly] = useState(false);
 
   const startTest = useCallback(() => {
     setGameState("waiting");
     const delay = Math.random() * 3000 + 1000;
-    setTimeout(() => {
+    const id = setTimeout(() => {
       setGameState("click");
       setStartTime(Date.now());
     }, delay);
+    setTimerId(id);
     if (attempts >= 5) {
       setBestTime(null);
       setAverageTime(null);
@@ -71,7 +74,9 @@ export default function ReactionTimeTest() {
 
   const handleClick = useCallback(() => {
     if (gameState === "waiting") {
-      setGameState("result");
+      clearTimeout(timerId!); // Clear the timer
+      setAttempts(prev => prev + 1);
+      setGameState("tooEarly"); // Set to tooEarly state
       setReactionTime(null);
     } else if (gameState === "click" && startTime) {
       const endTime = Date.now();
@@ -96,7 +101,21 @@ export default function ReactionTimeTest() {
         setGameState("result");
       }
     }
-  }, [gameState, startTime, attempts, bestTime]);
+  }, [gameState, startTime, attempts, bestTime, timerId]);
+
+  const tryAgain = () => {
+    setTooEarly(false);
+    setGameState("ready");
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+    };
+  }, [timerId]);
+
 
   const saveScore = async () => {
     if (!session?.user?.name || !bestTime) return;
@@ -335,11 +354,27 @@ export default function ReactionTimeTest() {
                     className="text-center space-y-6"
                   >
                     <h2 className="text-2xl font-semibold">
-                      {reactionTime === null ? "Too early!" : `Your reaction time: ${reactionTime} ms`}
+                      {`Your reaction time: ${reactionTime} ms`}
                     </h2>
                     <Button onClick={startTest} size="lg">
                       {attempts >= 5 ? "Play Again" : "Next Round"}
                       <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </motion.div>
+                )}
+
+                {gameState === "tooEarly" && (
+                  <motion.div
+                    key="tooEarly"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-6 font-bold"
+                  >
+                    <h2 className="text-2xl font-semibold text-red-500">Too Early!</h2>
+                    <p className="text-muted-foreground">You clicked too soon. Please wait for the green light.</p>
+                    <Button onClick={tryAgain} size="lg">
+                      Try Again
                     </Button>
                   </motion.div>
                 )}
